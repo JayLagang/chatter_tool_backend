@@ -3,12 +3,28 @@ const path = require('path');
 const {prisma} = require('../config/database');
 
 async function main(){
-    const bodyPartsData = await fs.readFile(path.join(__dirname, './data/body_part.json'), 'utf-8');
-    const bodyParts = JSON.parse(bodyPartsData);
+   
     try{
+        const bodyPartsData = await fs.readFile(path.join(__dirname, './data/body_part.json'), 'utf-8');
+        const bodyParts = JSON.parse(bodyPartsData);
+        const pictureFramingData = await fs.readFile(path.join(__dirname, './data/picture_framing.json'), 'utf-8');
+        const pictureFraming = JSON.parse(pictureFramingData);
+        const socialPlatformsData = await fs.readFile(path.join(__dirname, './data/social_platform.json'), 'utf-8');
+        const socialPlatforms = JSON.parse(socialPlatformsData);
+        const vaginaColorsData = await fs.readFile(path.join(__dirname, './data/vagina_color.json'), 'utf-8');
+        const vaginaColors = JSON.parse(vaginaColorsData)
         
         console.log('Seeding body parts...');
         await seedBodyParts(prisma, bodyParts, true);
+
+        console.log('Seeding pictureFraming...');
+        await seedPictureFraming(prisma,pictureFraming, true )
+
+        console.log('Seeding Social Platforms...')
+        await seedSocialPlatforms(prisma,socialPlatforms, true)
+
+        console.log('Seeding vgna colors')
+        await seedVaginaColors(prisma,vaginaColors, true)
 
     } catch (error) {
         console.error('Error seeding data:', error);
@@ -17,8 +33,9 @@ async function main(){
         await prisma.$disconnect();
     }
 }
+
 async function seedBodyParts(prisma, bodyParts, deleteAll) {
-    
+    // Ensure the model name matches the one in your Prisma schema
     if (deleteAll===true) {
         await prisma.bodyPart.deleteMany();
     }
@@ -37,6 +54,73 @@ async function seedBodyParts(prisma, bodyParts, deleteAll) {
     }
 
     console.log('Body parts seeded successfully');
+}
+
+async function seedPictureFraming(prisma, pictureFraming, deleteAll) {
+    // Ensure the model name matches the one in your Prisma schema
+    if (deleteAll===true) {
+        await prisma.pictureFraming.deleteMany();
+    }
+    for (const frame of pictureFraming) {
+        const newFrame = await prisma.pictureFraming.create({
+            data: {
+                name: frame.name
+            }
+        });
+        if(newFrame) {
+            console.log(`Picture framing ${frame.name} seeded successfully`);
+        } else {
+            console.error(`Failed to seed picture framing ${frame.name}`);
+        }
+
+    }
+
+    console.log('Picture framing seeded successfully');
+}
+
+async function seedSocialPlatforms(prisma, socialPlatforms, deleteAll) {
+    // Ensure the model name matches the one in your Prisma schema
+    if (deleteAll===true) {
+        await prisma.socialAccountType.deleteMany();
+    }
+    for (const platform of socialPlatforms) {
+        const newPlatform = await prisma.socialAccountType.create({
+            data: {
+                name: platform.name
+            }
+        });
+        if(newPlatform) {
+            console.log(`Social platform ${platform.name} seeded successfully`);
+        } else {
+            console.error(`Failed to seed social platform ${platform.name}`);
+        }
+
+    }
+
+    console.log('Social platforms seeded successfully');
+}
+
+async function seedVaginaColors(prisma, vaginaColors, deleteAll) {
+    // Ensure the model name matches the one in your Prisma schema
+    if (deleteAll===true) {
+        await prisma.vaginaColor.deleteMany();
+    }
+    for (const color of vaginaColors) {
+        const newColor = await prisma.vaginaColor.create({
+            data: {
+                name: color.name
+            }
+        });
+        if(newColor) {
+            console.log(`Vgna color ${color.name} seeded successfully`);
+        } else {
+            console.error(`Failed seeding vinga color ${color.name}`);
+        }
+
+    }
+
+    console.log('vgna colors seeded successfully');
+
 }
 
 main()

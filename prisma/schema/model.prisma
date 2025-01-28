@@ -1,31 +1,31 @@
 model Model {
-    id           String               @id @default(cuid())
-    createdAt    DateTime             @default(now())
-    updatedAt    DateTime             @updatedAt
-    userName     String               @unique
-    kidsCount    Int
-    age          Int
-    platforms    ModelSocialAccount[]
-    conversation Conversation[]
+  id           String               @id @default(cuid())
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  userName     String               @unique
+  kidsCount    Int
+  age          Int
+  platforms    ModelSocialAccount[]
+  conversation Conversation[]
 }
 
 model ModelSocialAccount {
-    id                String            @id @default(cuid())
-    createdAt         DateTime          @default(now())
-    updatedAt         DateTime          @updatedAt
-    socialAccountType SocialAccountType @relation(fields: [socialAccountName], references: [name])
-    socialAccountName String
-    username          String
-    link              String
-    model             Model             @relation(fields: [modelId], references: [id])
-    modelId           String
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  socialAccountType SocialAccountType @relation(fields: [socialAccountName], references: [name])
+  socialAccountName String
+  username          String
+  link              String
+  model             Model             @relation(fields: [modelId], references: [id])
+  modelId           String
 
-    @@index([modelId])
-    @@index([socialAccountName])
+  @@index([modelId])
+  @@index([socialAccountName])
 }
 
 model SocialAccountType {
-    id                 Int                  @id @default(autoincrement())
-    name               String               @unique
-    modelSocialAccount ModelSocialAccount[]
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  modelSocialAccount ModelSocialAccount[]
 }
