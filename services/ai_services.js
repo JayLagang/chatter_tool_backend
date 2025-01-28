@@ -2,9 +2,8 @@ const OpenAI= require('openai');
 const dotenv = require('dotenv');
 dotenv.config();
 const openai = new OpenAI({
-    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-    dangerouslyAllowBrowser: true 
-  });
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY
+});
   
 class AIService {
 
@@ -19,6 +18,10 @@ class AIService {
                 stop: null,
                 temperature: 0.7,
             });
+            
+            if(!response.data.choices[0].text) {
+                return null;
+            }
 
             return response.data.choices[0].text.trim();
         } catch (error) {
@@ -49,7 +52,9 @@ class AIService {
                 presence_penalty: 0,
             });
 
-            return response;
+            console.log('response:', response.choices[0].message);
+
+            return response.choices[0];
         } catch (error) {
             console.error('Error fetching response from OpenAI:', error.message);
             console.error('Error fetching response from OpenAI:', error);
@@ -58,4 +63,4 @@ class AIService {
     }
 }
 
-module.exports = AIService;
+module.exports = new AIService();

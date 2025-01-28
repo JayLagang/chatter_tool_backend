@@ -1,18 +1,16 @@
 const AIService = require('../services/ai_services');
-
-const getChatResponse = async (req, res) => {
+const ErrorResponse = require('../utils/error_response');
+exports.getChatResponse = async (req, res) => {
     const { prompt } = req.body;
-
+ 
     if (!prompt) {
-        return res.status(400).json({ error: 'Prompt is required' });
+        throw new ErrorResponse('Prompt is required', 400);
     }
-
     try {
-        const response = await AIService.getChatResponse(prompt);
-        res.json({ response });
+        const response = await AIService.getFlirtyHustlerResponse(prompt);
+        res.json({ success: true, data: response });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        throw new ErrorResponse(error.message, 500);
     }
 };
 
-module.exports = { getChatResponse };
