@@ -1,0 +1,47 @@
+{
+  "name": "chatter_tool_backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "node tests/behaviour/test.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.731.1",
+    "@aws-sdk/lib-storage": "^3.731.1",
+    "@aws-sdk/s3-request-presigner": "^3.731.1",
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.6.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "docx": "^8.5.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "helmet": "^7.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.79.1",
+    "passport": "^0.7.0",
+    "password-validator": "^5.3.0",
+    "pg": "^8.13.1",
+    "pg-hstore": "^2.3.4",
+    "phone": "^3.1.57",
+    "sharp": "^0.33.5",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "axios": "^1.7.9",
+    "nodemon": "^3.1.9",
+    "prisma": "^5.22.0"
+  }
+}
