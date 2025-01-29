@@ -1,4 +1,4 @@
-
+const Category = require('../services/category_service');
 const ErrorResponse = require('../utils/error_response');
 
 exports.getAllVaginaColors = async (req, res) => {

@@ -55,6 +55,22 @@ class Model {
 
     }
 
+    static async getAllModels() {
+        const result = await prisma.model.findMany({
+            include: {
+                platforms: true,
+                samplePictures: true,
+                physicalAttributes: true
+            }
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
+
     static async updateAttributes(data) {
         const {userName, physicalAttributes} = data;
         const {height, weight, bust, waist, skinToneName,ethnicityName} = physicalAttributes;
