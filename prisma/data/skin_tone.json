@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Light"
+    },
+    {
+        "id": 2,
+        "name": "Fair"
+    },
+    {
+        "id": 3,
+        "name": "Medium"
+    },
+    {
+        "id": 4,
+        "name": "Olive"
+    },
+    {
+        "id": 5,
+        "name": "Brown"
+    },
+    {
+        "id": 6,
+        "name": "Dark"
+    }
+]

@@ -5,6 +5,7 @@ const {prisma} = require('../config/database');
 async function main(){
    
     try{
+        
         const bodyPartsData = await fs.readFile(path.join(__dirname, './data/body_part.json'), 'utf-8');
         const bodyParts = JSON.parse(bodyPartsData);
         const pictureFramingData = await fs.readFile(path.join(__dirname, './data/picture_framing.json'), 'utf-8');
@@ -13,6 +14,8 @@ async function main(){
         const socialPlatforms = JSON.parse(socialPlatformsData);
         const vaginaColorsData = await fs.readFile(path.join(__dirname, './data/vagina_color.json'), 'utf-8');
         const vaginaColors = JSON.parse(vaginaColorsData)
+        const skinToneData = await fs.readFile(path.join(__dirname, './data/skin_tone.json'), 'utf-8');
+        const skinTone = JSON.parse(skinToneData)
         
         console.log('Seeding body parts...');
         await seedBodyParts(prisma, bodyParts, true);
@@ -25,6 +28,9 @@ async function main(){
 
         console.log('Seeding vgna colors')
         await seedVaginaColors(prisma,vaginaColors, true)
+
+        console.log('Seeding Skin Tones')
+        await seedSkinTones(prisma,skinTone,true)
 
     } catch (error) {
         console.error('Error seeding data:', error);
@@ -100,6 +106,28 @@ async function seedSocialPlatforms(prisma, socialPlatforms, deleteAll) {
     console.log('Social platforms seeded successfully');
 }
 
+async function seedSkinTones(prisma, skinTones, deleteAll) {
+    // Ensure the model name matches the one in your Prisma schema
+    if (deleteAll===true) {
+        await prisma.skinTone.deleteMany();
+    }
+    for (const tone of skinTones) {
+        const newTone = await prisma.skinTone.create({
+            data: {
+                name: tone.name
+            }
+        });
+        if(newTone) {
+            console.log(`Skin tone ${tone.name} seeded successfully`);
+        } else {
+            console.error(`Failed seeding skin tone ${tone.name}`);
+        }
+
+    }
+
+    console.log('Skin tones seeded successfully');
+
+}
 async function seedVaginaColors(prisma, vaginaColors, deleteAll) {
     // Ensure the model name matches the one in your Prisma schema
     if (deleteAll===true) {

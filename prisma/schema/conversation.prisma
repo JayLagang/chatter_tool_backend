@@ -1,26 +1,41 @@
 model Conversation {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  senderName String
-  model      Model     @relation(fields: [modelId], references: [id])
-  modelId    String
-  messages   Message[]
+  id             String               @id @default(cuid())
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  senderUserName String               @unique
+  model          Model                @relation(fields: [modelId], references: [id])
+  modelId        String
+  messages       Message[]
+  samplePictures ModelSamplePicture[]
 
   @@index([modelId])
 }
 
 model Message {
-  id              String       @id @default(cuid())
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  actualtSendTime DateTime     @default(now())
-  type            MessageType
-  content         String
-  conversation    Conversation @relation(fields: [conversationId], references: [id])
-  conversationId  String
+  id                  String             @id @default(cuid())
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  actualtSendTime     DateTime           @default(now())
+  messageIndex        Int
+  isFromSender        Boolean
+  type                MessageType
+  content             String
+  picture             PictureFromSender? @relation(fields: [pictureFromSenderId], references: [id])
+  conversation        Conversation       @relation(fields: [conversationId], references: [id])
+  conversationId      String
+  pictureFromSenderId Int?
 
+  @@index([pictureFromSenderId])
   @@index([conversationId])
+}
+
+model PictureFromSender {
+  id                    Int       @id @default(autoincrement())
+  url                   String
+  verySuggestiveScore   Float
+  suggestiveScore       Float
+  mildlySuggestiveScore Float
+  Message               Message[]
 }
 
 enum MessageType {
@@ -32,23 +47,22 @@ model ModelSamplePicture {
   id                 String         @id @default(cuid())
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
+  model              Model          @relation(fields: [modelId], references: [id])
   framing            PictureFraming @relation(fields: [pictureFramingName], references: [name])
   exposedPart        BodyPart       @relation(fields: [bodyPartName], references: [name])
   vaginaColor        VaginaColor    @relation(fields: [vaginaColorName], references: [name])
   vaginaColorName    String
   bodyPartName       String
   pictureFramingName String
+  modelId            String
+  conversation       Conversation?  @relation(fields: [conversationId], references: [id])
+  conversationId     String?
 
+  @@index([conversationId])
+  @@index([modelId])
   @@index([vaginaColorName])
   @@index([bodyPartName])
   @@index([pictureFramingName])
-}
-
-model PictureFromSender {
-  id                    Int   @id @default(autoincrement())
-  verySuggestiveScore   Float
-  suggestiveScore       Float
-  mildlySuggestiveScore Float
 }
 
 model BodyPart {

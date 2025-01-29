@@ -7,7 +7,6 @@ const openai = new OpenAI({
   
 class AIService {
 
-
     async getFlirtyHustlerResponse(newUserMessage) {
 
         const systemMessage = {
@@ -59,6 +58,10 @@ class AIService {
             console.error('Error fetching response from OpenAI:', error);
             throw new Error('Failed to fetch response from AI service');
         }
+    }
+
+    static async analyzeImageSuggestiveness(imageUrl){
+
     }
 }
 

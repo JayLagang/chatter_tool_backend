@@ -1,12 +1,46 @@
 model Model {
-  id           String               @id @default(cuid())
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
-  userName     String               @unique
-  kidsCount    Int
-  age          Int
-  platforms    ModelSocialAccount[]
-  conversation Conversation[]
+  id                 String                   @id @default(cuid())
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+  userName           String                   @unique
+  firstName          String?
+  lastName           String?
+  childCount         Int
+  age                Int
+  platforms          ModelSocialAccount[]
+  conversation       Conversation[]
+  samplePictures     ModelSamplePicture[]
+  physicalAttributes ModelPhysicalAttributes?
+}
+
+model ModelPhysicalAttributes {
+  id            Int        @id @default(autoincrement())
+  height        Int?
+  weight        Int?
+  bust          Int?
+  waist         Int?
+  model         Model      @relation(fields: [modelId], references: [id])
+  modelId       String     @unique
+  skinTone      SkinTone?  @relation(fields: [skinToneName], references: [name])
+  skinToneName  String?
+  ethnicity     Ethnicity? @relation(fields: [ethnicityName], references: [name])
+  ethnicityName String?
+
+  @@index([ethnicityName])
+  @@index([skinToneName])
+  @@index([modelId])
+}
+
+model SkinTone {
+  id                      Int                       @id @default(autoincrement())
+  name                    String                    @unique
+  modelPhysicalAttributes ModelPhysicalAttributes[]
+}
+
+model Ethnicity {
+  id                      Int                       @id @default(autoincrement())
+  name                    String                    @unique
+  modelPhysicalAttributes ModelPhysicalAttributes[]
 }
 
 model ModelSocialAccount {
