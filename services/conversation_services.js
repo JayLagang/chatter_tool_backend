@@ -57,6 +57,39 @@ class Conversation {
         });
     }
     
+    async insertMessage(data) {
+
+        const {conversationId,senderRole, type, text, pictureFromSenderUrl,pictureFromModelUrl} = data;
+        const currentMessagesCount = await prisma.message.count({
+            where: {
+                conversationId: conversationId
+            }
+        });
+        const newMessageIndex = currentMessagesCount + 1;
+        const result = await prisma.conversation.update({
+            where: {
+                id: conversationId
+            },
+            data: {
+                messages: {
+                    create: {
+                        messageIndex: newMessageIndex,
+                        senderRole: senderRole,
+                        type: type,
+                        text: text,
+                        pictureFromSenderUrl: pictureFromSenderUrl,
+                        pictureFromModelUrl: pictureFromModelUrl
+                    }
+                }
+            }
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
 }
 
 

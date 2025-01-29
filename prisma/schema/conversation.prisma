@@ -11,26 +11,34 @@ model Conversation {
 }
 
 model Message {
-  id                  String             @id @default(cuid())
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
-  actualtSendTime     DateTime           @default(now())
-  messageIndex        Int
-  isFromSender        Boolean
-  type                MessageType
-  content             String
-  picture             PictureFromSender? @relation(fields: [pictureFromSenderId], references: [id])
-  conversation        Conversation       @relation(fields: [conversationId], references: [id])
-  conversationId      String
-  pictureFromSenderId Int?
+  id                   String              @id @default(cuid())
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  actualtSendTime      DateTime            @default(now())
+  messageIndex         Int
+  senderRole           Role
+  type                 MessageType
+  text                 String?
+  pictureFromSender    PictureFromSender?  @relation(fields: [pictureFromSenderUrl], references: [url])
+  pictureFromSenderUrl String?
+  pictureFromModel     ModelSamplePicture? @relation(fields: [pictureFromModelUrl], references: [url])
+  pictureFromModelUrl  String?
+  conversation         Conversation        @relation(fields: [conversationId], references: [id])
+  conversationId       String
 
-  @@index([pictureFromSenderId])
+  @@index([pictureFromModelUrl])
+  @@index([pictureFromSenderUrl])
   @@index([conversationId])
 }
 
+enum Role {
+  user
+  assistant
+}
+
 model PictureFromSender {
-  id                    Int       @id @default(autoincrement())
-  url                   String
+  id                    String    @id @default(cuid())
+  url                   String    @unique
   verySuggestiveScore   Float
   suggestiveScore       Float
   mildlySuggestiveScore Float
