@@ -8,3 +8,39 @@ model EnglishProficiencyLevel {
     name        String  @unique
     description String?
 }
+
+model BodyPart {
+    id                 Int                  @id @default(autoincrement())
+    name               String               @unique
+    modelSamplePicture ModelSamplePicture[]
+}
+
+model PictureFraming {
+    id                 Int                  @id @default(autoincrement())
+    name               String               @unique
+    modelSamplePicture ModelSamplePicture[]
+}
+
+model VaginaColor {
+    id                 Int                  @id @default(autoincrement())
+    name               String               @unique
+    modelSamplePicture ModelSamplePicture[]
+}
+
+model SkinTone {
+    id                      Int                       @id @default(autoincrement())
+    name                    String                    @unique
+    modelPhysicalAttributes ModelPhysicalAttributes[]
+}
+
+model Ethnicity {
+    id                      Int                       @id @default(autoincrement())
+    name                    String                    @unique
+    modelPhysicalAttributes ModelPhysicalAttributes[]
+}
+
+model SocialAccountType {
+    id                 Int                  @id @default(autoincrement())
+    name               String               @unique
+    modelSocialAccount ModelSocialAccount[]
+}

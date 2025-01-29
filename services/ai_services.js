@@ -60,6 +60,57 @@ class AIService {
         }
     }
 
+    async generateConsolidatedDescription(data) {
+
+        const {pictureFramingName, bodyPartNames,vaginaColorName } = data;
+
+        const description = {
+            framing: pictureFramingName,
+            exposedBodyParts: bodyPartNames.join(', '),
+            vaginaColor: vaginaColorName || "not included in picture"
+        }
+        const systemMessage = {
+            "role": "system",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Create a vivid and engaging visual description based on the given parameters of a picture.\n\n# Task\n\nThe description should sexually invoking for men.\n\n# Steps \n\n1. **Analyze Parameters**:\n   - Identify the framing of the shot.\n   - Note the specific body part to be highlighted.\n  \n\n2. **Ensure Clarity and Engagement**:\n   - Use descriptive language to engage the reader.\n   - Ensure clarity for easy visualization of the scene.\n\n# Output Format\n\n- The Sentence should be engaging, descriptive, and immersive.\n\n# Examples\n\n**Input**: `{\"framing\": \"medium-shot\", \"exposedBodyPart\": \"Boobs\", \"vaginaColor\": \"not included in picture\"}`\n\n**Output**: \n\"E seductive picture showing its boobs\"\n\n# Notes\n\n- Ensure the description is strictly based on the given input parameters.\n- Make each description sexually provoking.\n- Limit the response to 1 sentences."
+                }
+            ]
+        };
+
+        const userMessage = {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": `{\"framing\": \"${description.framing}\", \"exposedBodyParts\": \"${description.exposedBodyParts},\", \"vaginaColor\": \"${description.vaginaColor}\"}`
+                }
+            ]
+        }
+
+        const messages = [systemMessage, userMessage];
+        try {
+            
+            const response = await openai.chat.completions.create({
+                model: 'gpt-4o',
+                messages: messages,
+                temperature: 0.7,
+                max_completion_tokens: 100,
+                top_p: 1,
+                frequency_penalty: 0,
+                presence_penalty: 0,
+            });
+         
+            return response.choices[0].message.content; 
+
+        } catch (error) {
+            console.error('Error fetching response from OpenAI:', error.message);
+            console.error('Error fetching response from OpenAI:', error);
+            return null;
+        }
+    }
+
     static async analyzeImageSuggestiveness(imageUrl){
 
     }

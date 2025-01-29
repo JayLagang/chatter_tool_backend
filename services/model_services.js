@@ -154,6 +154,32 @@ class Model {
         return result;
     }
     
+    static async uploadModelSamplePicture(data) {
+        const {modelId, vaginaColorName, bodyPartName,pictureFramingName, url, consolidatedDescription} = data;
+
+        const result = await prisma.model.update({
+            where: {
+                modelId: modelId
+            },
+            data: {
+                samplePictures: {
+                    create: {
+                        vaginaColorName: vaginaColorName,
+                        bodyPartName: bodyPartName,
+                        pictureFramingName: pictureFramingName,
+                        url: url,
+                        consolidatedDescription: consolidatedDescription
+                    }
+                }
+            }
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
 }
 
 module.exports = Model;

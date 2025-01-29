@@ -1,9 +1,10 @@
 const AIService = require('../../services/ai_services');
-const aiServiceInstance = new AIService();
 
 const goTest = async () => {
-    const result = await aiServiceInstance.getFlirtyHustlerResponse({
-        
+    const result = await AIService.generateConsolidatedDescription({
+        pictureFramingName: 'Full Body',
+        bodyPartNames: ['Breasts','Face'],
+        vaginaColorName: undefined
     });
     return result;
 }

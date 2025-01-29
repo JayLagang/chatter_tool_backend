@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const aiRoutes = require('./routes/ai_routes');
 const categoryRoutes = require('./routes/category_routes');
 const modelRoutes = require('./routes/model_routes');
+const conversationRoutes = require('./routes/conversation_routes');
 const app = express();
 
 // Middleware
@@ -15,6 +16,7 @@ app.use(morgan('dev'));
 app.use('/api/ai', aiRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/model', modelRoutes);
+app.use('/api/conversation', conversationRoutes);
 
 
 const PORT = process.env.PORT;

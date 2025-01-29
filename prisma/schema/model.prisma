@@ -31,16 +31,25 @@ model ModelPhysicalAttributes {
   @@index([modelId])
 }
 
-model SkinTone {
-  id                      Int                       @id @default(autoincrement())
-  name                    String                    @unique
-  modelPhysicalAttributes ModelPhysicalAttributes[]
-}
+model ModelSamplePicture {
+  id                      String         @id @default(cuid())
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  model                   Model          @relation(fields: [modelId], references: [id])
+  framing                 PictureFraming @relation(fields: [pictureFramingName], references: [name])
+  exposedPart             BodyPart       @relation(fields: [bodyPartName], references: [name])
+  vaginaColor             VaginaColor?   @relation(fields: [vaginaColorName], references: [name])
+  vaginaColorName         String?
+  bodyPartName            String
+  pictureFramingName      String
+  consolidatedDescription String
+  modelId                 String
+  url                     String
 
-model Ethnicity {
-  id                      Int                       @id @default(autoincrement())
-  name                    String                    @unique
-  modelPhysicalAttributes ModelPhysicalAttributes[]
+  @@index([modelId])
+  @@index([vaginaColorName])
+  @@index([bodyPartName])
+  @@index([pictureFramingName])
 }
 
 model ModelSocialAccount {
@@ -56,10 +65,4 @@ model ModelSocialAccount {
 
   @@index([modelId])
   @@index([socialAccountName])
-}
-
-model SocialAccountType {
-  id                 Int                  @id @default(autoincrement())
-  name               String               @unique
-  modelSocialAccount ModelSocialAccount[]
 }
