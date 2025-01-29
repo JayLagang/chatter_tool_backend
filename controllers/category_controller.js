@@ -70,3 +70,23 @@ exports.getAllSocialPlatforms = async (req, res) => {
         throw new ErrorResponse(error.message, 500);
     }
 };
+
+exports.getAllCitizenships = async (req, res) => {
+    try {
+        const citizenships = await Category.getAllCitizenships();
+        res.json({ success: true, data: citizenships });
+    } catch (error) {
+        console.log(error.message);
+        throw new ErrorResponse(error.message, 500);
+    }
+};
+
+exports.getAllEnglishProficiencyLevels = async (req, res) => {
+    try {
+        const englishProficiencyLevels = await Category.getAllEnglishProficiencyLevels();
+        res.json({ success: true, data: englishProficiencyLevels });
+    } catch (error) {
+        console.log(error.message);
+        throw new ErrorResponse(error.message, 500);
+    }
+};
