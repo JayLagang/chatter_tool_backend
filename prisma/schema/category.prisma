@@ -1,0 +1,10 @@
+model Citizenship {
+    id   Int    @id @default(autoincrement())
+    name String @unique
+}
+
+model EnglishProficiencyLevel {
+    id          Int     @id @default(autoincrement())
+    name        String  @unique
+    description String?
+}

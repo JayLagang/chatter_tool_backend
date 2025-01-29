@@ -5,7 +5,7 @@ const {prisma} = require('../config/database');
 async function main(){
    
     try{
-        
+
         const bodyPartsData = await fs.readFile(path.join(__dirname, './data/body_part.json'), 'utf-8');
         const bodyParts = JSON.parse(bodyPartsData);
         const pictureFramingData = await fs.readFile(path.join(__dirname, './data/picture_framing.json'), 'utf-8');
@@ -16,7 +16,11 @@ async function main(){
         const vaginaColors = JSON.parse(vaginaColorsData)
         const skinToneData = await fs.readFile(path.join(__dirname, './data/skin_tone.json'), 'utf-8');
         const skinTone = JSON.parse(skinToneData)
-        
+        const citizenshipData = await fs.readFile(path.join(__dirname, './data/citizenship.json'), 'utf-8');
+        const citizenship = JSON.parse(citizenshipData)
+        const englishProficiencyLevelData = await fs.readFile(path.join(__dirname, './data/english_proficiency_level.json'), 'utf-8');
+        const englishProficiency = JSON.parse(englishProficiencyLevelData)
+
         console.log('Seeding body parts...');
         await seedBodyParts(prisma, bodyParts, true);
 
@@ -31,6 +35,12 @@ async function main(){
 
         console.log('Seeding Skin Tones')
         await seedSkinTones(prisma,skinTone,true)
+
+        console.log('Seeding Citizenship')
+        await seedCitizenship(prisma,citizenship,true)
+
+        console.log('Seeding English Proficiency Levels')
+        await seedEnglishProficiency(prisma,englishProficiency,true)
 
     } catch (error) {
         console.error('Error seeding data:', error);
@@ -149,6 +159,49 @@ async function seedVaginaColors(prisma, vaginaColors, deleteAll) {
 
     console.log('vgna colors seeded successfully');
 
+}
+async function seedCitizenship(prisma, citizenship, deleteAll) {
+    // Ensure the model name matches the one in your Prisma schema
+    if (deleteAll===true) {
+        await prisma.citizenship.deleteMany();
+    }
+    for (const country of citizenship) {
+        const newCountry = await prisma.citizenship.create({
+            data: {
+                name: country.name
+            }
+        });
+        if(newCountry) {
+            console.log(`Citizenship ${country.name} seeded successfully`);
+        } else {
+            console.error(`Failed seeding citizenship ${country.name}`);
+        }
+
+    }
+
+    console.log('Citizenship seeded successfully');
+}
+
+async function seedEnglishProficiency(prisma, englishProficiency, deleteAll) {
+    // Ensure the model name matches the one in your Prisma schema
+    if (deleteAll===true) {
+        await prisma.englishProficiencyLevel.deleteMany();
+    }
+    for (const level of englishProficiency) {
+        const newLevel = await prisma.englishProficiencyLevel.create({
+            data: {
+                name: level.name
+            }
+        });
+        if(newLevel) {
+            console.log(`English proficiency level ${level.name} seeded successfully`);
+        } else {
+            console.error(`Failed seeding English proficiency level ${level.name}`);
+        }
+
+    }
+
+    console.log('English proficiency levels seeded successfully');
 }
 
 main()
