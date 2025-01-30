@@ -11,7 +11,7 @@ class ConversationValidators {
 
     getConversation() {
         return [
-            query('name').isString().notEmpty(),
+            query('id').isString().notEmpty(),
         ];
     }
 

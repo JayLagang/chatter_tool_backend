@@ -31,13 +31,18 @@ class Conversation {
         return result;
     }
 
-    async getConversationById(id) {
+    async getConversation(id) {
         return await prisma.conversation.findUnique({
             where: {
                 id: id
             },
             include: {
-                messages: true,
+                messages: {
+                    orderBy: {
+                        messageIndex: 'asc'
+                    },
+                    limit: 100
+                },
                 model: true
             }
         });

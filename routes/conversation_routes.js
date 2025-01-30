@@ -6,4 +6,8 @@ const conversationController = require('../controllers/conversation_controller')
 
 router.post('/', ConversationValidators.createConversation(),RequestValidator.validate(), conversationController.createConversation);
 
+router.get('/:id', conversationController.getConversation);
+
+router.get('/', conversationController.getAllConversations);
+
 module.exports = router;
