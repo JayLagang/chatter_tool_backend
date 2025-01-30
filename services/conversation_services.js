@@ -3,7 +3,7 @@ const {prisma} = require('../config/database');
 
 
 class Conversation {
-    
+
     async createConversation(data) {
         
         const {senderUserName, modelUserName, samplePictureIds} = data;
@@ -40,8 +40,7 @@ class Conversation {
                 messages: {
                     orderBy: {
                         messageIndex: 'asc'
-                    },
-                    limit: 100
+                    }
                 },
                 model: true
             }
@@ -65,10 +64,11 @@ class Conversation {
             }
         });
     }
-    
+
     async insertMessage(data) {
 
         const {conversationId,senderRole, type, text, pictureFromSenderUrl,pictureFromModelUrl} = data;
+
         const currentMessagesCount = await prisma.message.count({
             where: {
                 conversationId: conversationId
@@ -99,6 +99,7 @@ class Conversation {
 
         return result;
     }
+
 }
 
 

@@ -28,7 +28,7 @@ exports.createConversation = async (req, res) => {
 
 exports.getConversation = async (req, res) => {
     try {
-        return res.status(200).json({ success: true, message: req.params.id });
+
         const conversation = await Conversation.getConversation(req.params.id);
 
         if(!conversation) {
