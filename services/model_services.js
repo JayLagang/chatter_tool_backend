@@ -3,9 +3,8 @@ const {prisma} = require('../config/database');
 class Model {
 
     static async createModel(data) {
-
         const {userName, firstName, lastName, childCount, age, physicalAttributes} = data;
-        const {height, weight, bust, waist, skinToneName,ethnicityName} = physicalAttributes;
+
         const result = await prisma.model.create({
             data: {
                 userName: userName,
@@ -15,12 +14,12 @@ class Model {
                 age: age,
                 physicalAttributes: {
                     create: {
-                        height: height,
-                        weight: weight,
-                        bust: bust,
-                        waist: waist,
-                        skinToneName: skinToneName,
-                        ethnicityName: ethnicityName
+                        height: physicalAttributes?.height,
+                        weight: physicalAttributes?.weight,
+                        bust: physicalAttributes?.bust,
+                        waist: physicalAttributes?.waist,
+                        skinToneName: physicalAttributes?.skinToneName,
+                        ethnicityName: physicalAttributes?.ethnicityName
                     }
                 }
             }
@@ -34,9 +33,23 @@ class Model {
 
     }
 
-    static async getModel(userName) {
-        
-        const result = await prisma.model.findUnique({
+    static async getModelByUserName(userName) {
+        const result = await prisma.model.findFirst({
+            where: {
+                userName: userName
+            }
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
+
+    static async getModel(data) {
+        const {userName} = data;
+        const result = await prisma.model.findFirst({
             where: {
                 userName: userName
             },

@@ -1,24 +1,32 @@
 const Model = require('../services/model_services');
 const AIService = require('../services/ai_services');
-const ErrorResponse = require('../utils/error_response');
 
 exports.createModel = async (req, res) => {
     try {
-        const model = await Model.createModel(req.body);
-        res.json({ success: true, data: model });
+        const modelExists = await Model.getModelByUserName(req.body.model.userName);
+
+        if(modelExists) {
+            return res.status(400).json({ success: false, message: 'Model already exists' });
+        }
+        
+        const model = await Model.createModel(req.body.model);
+
+        res.json({ success: true, message: 'Model created', data: model });
+
     } catch (error) {
-        console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+
+        res.status(500).json({ success: false, message: error.message });
+
     }
 };
 
 exports.getModel = async (req, res) => {
     try {
-        const model = await Model.getModel(req.params.userName);
-        res.json({ success: true, data: model });
+        const model = await Model.getModel(req.params);
+        return res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get model' });
     }
 };
 
@@ -28,7 +36,7 @@ exports.getAllModels = async (req, res) => {
         res.json({ success: true, data: models });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get models' });
     }
 };
 
@@ -38,7 +46,7 @@ exports.updateAttributes = async (req, res) => {
         res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to update model' });
     }
 };
 
@@ -48,7 +56,7 @@ exports.addSocialPlatform = async (req, res) => {
         res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to add social platform' });
     }
 };
 
@@ -58,7 +66,7 @@ exports.updateSocialPlatform = async (req, res) => {
         res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to update social platform' });
     }
 };
 
@@ -71,7 +79,7 @@ exports.uploadSamplePicture = async (req, res) => {
         });
 
         if(!consolidatedDescription) {
-            throw new Error('Failed to generate consolidated description');
+            return res.status(500).json({ success: false, message: 'Failed to generate consolidated description' });
         }
         req.body.consolidatedDescription = consolidatedDescription;
 
@@ -81,6 +89,6 @@ exports.uploadSamplePicture = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to upload sample picture' });
     }
 };

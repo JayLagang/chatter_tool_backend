@@ -3,11 +3,11 @@ model Conversation {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   senderUserName String    @unique
-  model          Model     @relation(fields: [modelId], references: [id])
-  modelId        String
+  model          Model     @relation(fields: [modelUserName], references: [userName])
+  modelUserName  String
   messages       Message[]
 
-  @@index([modelId])
+  @@index([modelUserName])
 }
 
 model Message {

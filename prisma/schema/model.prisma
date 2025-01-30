@@ -5,8 +5,8 @@ model Model {
   userName           String                   @unique
   firstName          String?
   lastName           String?
-  childCount         Int
-  age                Int
+  childCount         Int?
+  age                Int?
   platforms          ModelSocialAccount[]
   conversation       Conversation[]
   samplePictures     ModelSamplePicture[]

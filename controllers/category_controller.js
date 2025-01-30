@@ -1,5 +1,4 @@
 const Category = require('../services/category_service');
-const ErrorResponse = require('../utils/error_response');
 
 exports.getAllVaginaColors = async (req, res) => {
     try {
@@ -7,7 +6,7 @@ exports.getAllVaginaColors = async (req, res) => {
         res.json({ success: true, data: vaginaColors });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get Vagina Colors' });
     }
 };
 
@@ -17,7 +16,7 @@ exports.getAllSkinTones = async (req, res) => {
         res.json({ success: true, data: skinTones });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get skin tones' });
     }
 };
 
@@ -27,7 +26,7 @@ exports.getAllEthnicities = async (req, res) => {
         res.json({ success: true, data: ethnities });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get ethnities' });
     }
 };
 
@@ -37,7 +36,7 @@ exports.getAllSocialPlatforms = async (req, res) => {
         res.json({ success: true, data: socialPlatforms });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get social platforms' });
     }
 };
 
@@ -47,7 +46,7 @@ exports.getAllPictureFramings = async (req, res) => {
         res.json({ success: true, data: pictureFramings });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get picture framings' });
     }
 };
 
@@ -57,7 +56,7 @@ exports.getAllBodyParts = async (req, res) => {
         res.json({ success: true, data: bodyParts });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get body parts' });
     }
 };
 
@@ -67,7 +66,7 @@ exports.getAllSocialPlatforms = async (req, res) => {
         res.json({ success: true, data: socialPlatforms });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get social platforms' });
     }
 };
 
@@ -77,7 +76,7 @@ exports.getAllCitizenships = async (req, res) => {
         res.json({ success: true, data: citizenships });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get citizenships' });
     }
 };
 
@@ -87,6 +86,6 @@ exports.getAllEnglishProficiencyLevels = async (req, res) => {
         res.json({ success: true, data: englishProficiencyLevels });
     } catch (error) {
         console.log(error.message);
-        throw new ErrorResponse(error.message, 500);
+        return res.status(500).json({ success: false, message: 'Failed to get english proficiency levels' });
     }
 };

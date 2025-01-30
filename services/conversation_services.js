@@ -6,13 +6,17 @@ class Conversation {
     
     async createConversation(data) {
         
-        const {senderUserName, modelId, samplePictureIds} = data;
+        const {senderUserName, modelUserName, samplePictureIds} = data;
 
         const result = await prisma.conversation.create({
             data: {
                 senderUserName: senderUserName,
-                modelId: modelId,
-                samplePictures: {
+                model: {
+                    connect: {
+                        userName: modelUserName
+                    }
+                },
+                samplePictures: samplePictureIds.length === 0 ? undefined : {
                     connect: samplePictureIds.map((id) => {
                         return {id: id};
                     })
@@ -93,4 +97,4 @@ class Conversation {
 }
 
 
-module.exports = Conversation;
+module.exports = new Conversation();
