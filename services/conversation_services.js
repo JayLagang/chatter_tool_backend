@@ -1,7 +1,6 @@
 const dotenv = require('dotenv');
 const {prisma} = require('../config/database');
 
-
 class Conversation {
 
     async createConversation(data) {
@@ -67,14 +66,16 @@ class Conversation {
 
     async insertMessage(data) {
 
-        const {conversationId,senderRole, type, text, pictureFromSenderUrl,pictureFromModelUrl} = data;
-
+        const {conversationId, senderRole, type, text, pictureFromSenderUrl, pictureFromModelUrl} = data;
+        
         const currentMessagesCount = await prisma.message.count({
             where: {
                 conversationId: conversationId
             }
         });
+
         const newMessageIndex = currentMessagesCount + 1;
+
         const result = await prisma.conversation.update({
             where: {
                 id: conversationId
