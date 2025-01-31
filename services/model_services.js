@@ -168,11 +168,12 @@ class Model {
     }
     
     static async uploadModelSamplePicture(data) {
-        const {modelId, vaginaColorName, bodyPartName,pictureFramingName, url, consolidatedDescription} = data;
+        
+        const {modelId, vaginaColorName, bodyPartName,pictureFramingName,uploadFileResult, consolidatedDescription} = data;
 
         const result = await prisma.model.update({
             where: {
-                modelId: modelId
+                id: modelId
             },
             data: {
                 samplePictures: {
@@ -180,7 +181,8 @@ class Model {
                         vaginaColorName: vaginaColorName,
                         bodyPartName: bodyPartName,
                         pictureFramingName: pictureFramingName,
-                        url: url,
+                        url: uploadFileResult.newObjectUrl,
+                        objectKey: uploadFileResult.newObjectKey,
                         consolidatedDescription: consolidatedDescription
                     }
                 }

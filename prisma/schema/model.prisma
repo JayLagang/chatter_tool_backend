@@ -34,6 +34,7 @@ model ModelPhysicalAttributes {
 model ModelSamplePicture {
   id                      String         @id @default(cuid())
   url                     String         @unique
+  objectKey               String
   createdAt               DateTime       @default(now())
   updatedAt               DateTime       @updatedAt
   model                   Model          @relation(fields: [modelId], references: [id])

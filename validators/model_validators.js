@@ -22,6 +22,14 @@ class ModelValidators {
             query('userName').notEmpty().withMessage('Username is required').isString().withMessage('Username must be a string')
         ]
     }
+
+    uploadSamplePicture() {
+        return [
+            body('bodyPartName').notEmpty().isIn(['Face', 'Boobs', 'Vagina', 'Butt', 'Feet', 'Whole-body']).withMessage('Body part name must be either Face, Boobs, Vagina or Butt', 'Feet', 'Whole-body'),
+            body('pictureFramingName').notEmpty().isIn(['Closeup Shot', 'Portrait Shot', 'Full-body Shot']).withMessage('pictureFramingName must be either Closeup Shot, Portrait Shot, Full-body Shot'),
+            body('vaginaColorName').optional().isIn(['Pink', 'Reddish', 'Brown', 'Pale Brown', 'Dark Brown']).withMessage('vaginaColorName must be either Pink, Reddish, Brown, Pale Brown, Dark Brown')
+        ]
+    }
 }
 
 module.exports = new ModelValidators();

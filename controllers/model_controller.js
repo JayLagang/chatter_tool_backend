@@ -1,5 +1,6 @@
 const Model = require('../services/model_services');
 const AIService = require('../services/ai_services');
+const {uploadFileUtil,deleteObject} = require('../utils/s3_files_handler');
 
 exports.createModel = async (req, res) => {
     try {
@@ -71,13 +72,35 @@ exports.updateSocialPlatform = async (req, res) => {
 };
 
 exports.uploadSamplePicture = async (req, res) => {
+    const modelId = req.params.id;
     try {
+
+        if(!modelId){
+            return res.status(400).json({ success: false, message: 'Model id is required' });
+        }
+
+        req.body.modelId = modelId;
+
+        req.uploadFileParams = {
+            file: req.files.image_file[0],
+            folder: 'model_sample_pictures',
+            fileSizeLimit: 50
+        }
+
+        const uploadFileResult = await uploadFileUtil(req);
+
+        if(!uploadFileResult){
+            return res.status(500).json({ success: false, message: 'Failed to upload file' });
+        }
+        
+        req.body.uploadFileResult = uploadFileResult;
+        
         const consolidatedDescription = await AIService.generateConsolidatedDescription({
             pictureFramingName: req.body.pictureFramingName,
-            bodyPartNames: req.body.bodyPartNames,
-            vaginaColorName: req.body.vaginaColorName
+            bodyPartName: req.body.bodyPartName,
+            vaginaColorName: req.body.vaginaColorName || null
         });
-
+        console.log("consolidatedDescription",consolidatedDescription);
         if(!consolidatedDescription) {
             return res.status(500).json({ success: false, message: 'Failed to generate consolidated description' });
         }
@@ -85,10 +108,10 @@ exports.uploadSamplePicture = async (req, res) => {
 
         const model = await Model.uploadModelSamplePicture(req.body);
         
-        res.json({ success: true, data: model });
+        res.json({ success: true, message:"Sample picture uploaded", data: model });
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         return res.status(500).json({ success: false, message: 'Failed to upload sample picture' });
     }
 };

@@ -62,19 +62,19 @@ class AIService {
 
     async generateConsolidatedDescription(data) {
 
-        const {pictureFramingName, bodyPartNames,vaginaColorName } = data;
+        const {pictureFramingName, bodyPartName,vaginaColorName } = data;
 
         const description = {
             framing: pictureFramingName,
-            exposedBodyParts: bodyPartNames.join(', '),
-            vaginaColor: vaginaColorName || "not included in picture"
+            exposedBodyPart: bodyPartName,
+            vaginaColor: vaginaColorName ? `Additionally, the color of the vagina on the picture is ${vaginaColorName}.` : null
         }
         const systemMessage = {
             "role": "system",
             "content": [
                 {
                     "type": "text",
-                    "text": "Create a vivid and engaging visual description based on the given parameters of a picture.\n\n# Task\n\nThe description should sexually invoking for men.\n\n# Steps \n\n1. **Analyze Parameters**:\n   - Identify the framing of the shot.\n   - Note the specific body part to be highlighted.\n  \n\n2. **Ensure Clarity and Engagement**:\n   - Use descriptive language to engage the reader.\n   - Ensure clarity for easy visualization of the scene.\n\n# Output Format\n\n- The Sentence should be engaging, descriptive, and immersive.\n\n# Examples\n\n**Input**: `{\"framing\": \"medium-shot\", \"exposedBodyPart\": \"Boobs\", \"vaginaColor\": \"not included in picture\"}`\n\n**Output**: \n\"E seductive picture showing its boobs\"\n\n# Notes\n\n- Ensure the description is strictly based on the given input parameters.\n- Make each description sexually provoking.\n- Limit the response to 1 sentences."
+                    "text": "You are good at giving vivid desciption of something when you are asked to. You are a woman and you are bit horny at the moment and you always provide with seductive response.\n\n# Steps \n\n1. **Analyze The Basic Description**:\n   - Identify the framing of the shot.\n   - Note the specific body part to be highlighted.\n  \n\n2. **Ensure Clarity and Engagement**:\n   - Use descriptive language to engage the reader.\n   - Ensure clarity for easy visualization of the scene.\n\n# Output Format\n\n- The Sentence should be engaging, descriptive, and immersive.\n\n# Examples\n\n**Input**: `How would you describe a medium-shot picture, a vagina is shown on the picture? It appears that the picture is very suggestive`\n\n\n# Notes\n\n- Ensure the description is strictly based on the given basic description by the user.\n- Make each description sexually provoking.\n- Make your response easy to understand, use commonly used words.\n- Its okay to use vulgar words.\n- Its okay to use explicit words.\n- Limit the response to 1 sentences."
                 }
             ]
         };
@@ -84,8 +84,8 @@ class AIService {
             "content": [
                 {
                     "type": "text",
-                    "text": `{\"framing\": \"${description.framing}\", \"exposedBodyParts\": \"${description.exposedBodyParts},\", \"vaginaColor\": \"${description.vaginaColor}\"}`
-                }
+                    "text": `How would you describe a ${description.framing} picture, a ${description.exposedBodyPart} is shown on the picture? It appears that the picture is very suggestive.${description.vaginaColor ? description.vaginaColor : null }`
+                  }
             ]
         }
 

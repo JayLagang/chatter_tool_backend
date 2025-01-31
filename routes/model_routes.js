@@ -3,7 +3,7 @@ const router = express.Router();
 const modelController = require('../controllers/model_controller')
 const ModelValidators = require('../validators/model_validators');
 const RequestValidator = require('../validators/request_validator');
-
+const parseMiddleware = require('../middlewares/multer_middleware');
 // @desc    Get a model
 // @route   GET /api/model
 router.get('/', ModelValidators.getModel(), RequestValidator.validate(), modelController.getModel)
@@ -27,5 +27,9 @@ router.put('/addSocialPlatform', modelController.addSocialPlatform)
 // @desc    Update a social platform
 // @route   PUT /api/model/updateSocialPlatform
 router.put('/updateSocialPlatform', modelController.updateSocialPlatform)
+
+// @desc Add model sample pictures
+// @route POST /api/model/:id/sample_picture
+router.post('/:id/sample_picture',parseMiddleware,ModelValidators.uploadSamplePicture(),RequestValidator.validate(), modelController.uploadSamplePicture)
 
 module.exports = router;

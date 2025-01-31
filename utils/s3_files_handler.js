@@ -118,7 +118,7 @@ const uploadFileUtil = async (req) => {
 	const convertedFileSizeLimit = fileSizeLimit * 1024 * 1024;
 	const uploadFileSize = file.size;
 
-	const availableFolders = ['sender-sent-pictures'];
+	const availableFolders = ['sender-sent-pictures', 'model_sample_pictures'];
 
 	if (!availableFolders.includes(folder)) {
 		console.error('Invalid folder name provided');
@@ -160,15 +160,25 @@ const uploadFileUtil = async (req) => {
 			return null;
 		  }
 	}
-	
-	console.log(file)
+
+	if(folder == 'model_sample_pictures'){
+			try {
+				resizedBuffer = await sharp(resizedBuffer)
+				.resize({ width: 300, height: 300, fit: 'cover' }) // Maintain aspect ratio
+				.toBuffer();
+			} catch (error) {
+				console.error('Error resizing image:', error);
+				return null;
+			}
+	}
+
 	const params = {
 		Bucket: bucketName || process.env.AWS_BUCKET_NAME,
 		Key: `${folder}/${uuidv4()}-${file.originalname}`,
 		Body: resizedBuffer,
 		ContentType: file.mimetype,
 	};
-
+	
 	const putObjectCommand = new PutObjectCommand(params);
 	await newS3Client.send(putObjectCommand);
 	const objectUrl = await generateUrl(bucketName, params.Key);
