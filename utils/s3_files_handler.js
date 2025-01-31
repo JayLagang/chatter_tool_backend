@@ -181,7 +181,7 @@ const uploadFileUtil = async (req) => {
 	
 	const putObjectCommand = new PutObjectCommand(params);
 	await newS3Client.send(putObjectCommand);
-	const objectUrl = await generateUrl(bucketName, params.Key);
+	const objectUrl = generatePublicUrl(bucketName, params.Key);
 
 	return {
 		newObjectKey: params.Key,
@@ -293,6 +293,10 @@ const generateUrl = async (bucket, avatarKey) => {
 		throw new ErrorResponse('Error generating temporary URL', 500);
 	}
 };
+
+const generatePublicUrl = (bucket, avatarKey) => {
+	return `https://${bucket}.s3.${process.env.AWS_BUCKET_REGION}.amazonaws.com/${avatarKey}`;
+  };
 
 module.exports = {
 	uploadFileUtil,
