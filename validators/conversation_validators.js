@@ -27,7 +27,7 @@ class ConversationValidators {
         return [
             // type must be either text or picture 
             body('type').notEmpty().isIn(['text', 'picture']).withMessage('Type must be either text or picture'),
-            body('text').optional().isString().withMessage('Text must be a string'),
+            body('text').optional().isString().withMessage('Text must be a string')
         ]
     }
 }
