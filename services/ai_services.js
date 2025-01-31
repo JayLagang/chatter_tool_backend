@@ -142,7 +142,7 @@ class AIService {
     static async generateAIResponse(conversation,modelSamplePictures) {
 
         const flirtyResponse = await this.getFlirtyHustlerResponse(conversation.messages,modelSamplePictures);
-
+        const aiOnlyResponse = []
         if(!flirtyResponse){
             return null;
         }
@@ -150,12 +150,23 @@ class AIService {
             for (let i = 0; i < flirtyResponse.content.length; i++) {
                 const response = flirtyResponse.content[i];
                 conversation.messages.push({
+                    id: null,
                     messageIndex: conversation.messages.length + 1,
                     senderRole: 'assistant',
                     type: response.type,
                     text: response.type === 'text' ? response.content : undefined,
                     pictureFromModelUrl: response.type === 'picture' ? response.content : undefined
                 });
+
+                aiOnlyResponse.push({
+                    id: null,
+                    messageIndex: conversation.messages.length + 1,
+                    senderRole: 'assistant',
+                    type: response.type,
+                    text: response.type === 'text' ? response.content : undefined,
+                    pictureFromModelUrl: response.type === 'picture' ? response.content : undefined
+                });
+
             }
         }else{
             conversation.messages.push({
@@ -166,7 +177,7 @@ class AIService {
             });
         }
         delete conversation.model;
-        return conversation;
+        return {conversation: conversation, aiOnlyResponse: aiOnlyResponse};
     }
 }
 

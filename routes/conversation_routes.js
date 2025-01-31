@@ -20,7 +20,7 @@ router.get('/:id', conversationController.getConversation);
 router.post('/:id', parseMiddleware, ConversationValidators.saveNewSenderMessage(), RequestValidator.validate(), conversationController.saveNewMessage);
 
 // @desc    Generate AI response
-// @route   POST /api/conversation/:id/generate_ai_response
+// @route   GET /api/conversation/:id/generate_ai_response
 router.get('/:id/generate_ai_response', conversationController.generateAIResponse);
 
 module.exports = router;

@@ -134,7 +134,7 @@ exports.generateAIResponse = async (req, res) => {
             return res.status(500).json({ success: false, message: 'Failed to generate AI response' });
         }
 
-        return res.status(200).json({ success: true, message: 'AI response generated', response: response });
+        return res.status(200).json({ success: true, message: 'AI response generated', data: response });
         
     } catch (error) {
         console.log(error.message);
