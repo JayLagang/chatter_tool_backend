@@ -1,4 +1,5 @@
 const Conversation = require('../services/conversation_services');
+const AIService = require('../services/ai_services');
 const Model = require('../services/model_services');
 const {uploadFileUtil,deleteObject} = require('../utils/s3_files_handler');
 exports.createConversation = async (req, res) => {
@@ -108,5 +109,35 @@ exports.saveNewMessage = async (req, res) => {
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({ success: false, message: 'Failed to insert message' });
+    }
+};
+
+exports.generateAIResponse = async (req, res) => {
+
+    try {
+
+        const conversation = await Conversation.getConversation(req.params.id);
+
+        if(!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+        const lastMessageIsFromUser = await AIService.lastMessageIsFromUser(conversation.messages);
+
+        if(!lastMessageIsFromUser){
+            return res.status(400).json({ success: false, message: 'Unable to generate. Last message is not from user' });
+        }
+        const modelSamplePictures = await Model.getModelSamplePictures(conversation.model.id);
+ 
+        const response = await AIService.generateAIResponse(conversation,modelSamplePictures);
+        
+        if(!response) {
+            return res.status(500).json({ success: false, message: 'Failed to generate AI response' });
+        }
+
+        return res.status(200).json({ success: true, message: 'AI response generated', response: response });
+        
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ success: false, message: 'Failed to generate AI response' });
     }
 };

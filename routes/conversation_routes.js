@@ -15,4 +15,8 @@ router.get('/:id', conversationController.getConversation);
 // @route   POST /conversation/:id
 router.post('/:id', parseMiddleware, ConversationValidators.saveNewSenderMessage(), RequestValidator.validate(), conversationController.saveNewMessage);
 
+// @desc    Generate AI response
+// @route   POST /conversation/:id/generate_ai_response
+router.get('/:id/generate_ai_response', conversationController.generateAIResponse);
+
 module.exports = router;
