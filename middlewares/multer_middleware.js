@@ -6,7 +6,7 @@ const parseMiddleware = (req, res, next) => {
 	console.log('Request received in route handler');
 
 	upload.fields([
-		{ name: 'pictureFromSenderFile', maxCount: 1 }
+		{ name: 'image_file', maxCount: 1 }
 	])(req, res, (err) => {
 		if (err) {
 			console.error('Multer error:', err);
