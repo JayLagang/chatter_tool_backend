@@ -7,16 +7,20 @@ const parseMiddleware = require('../middlewares/multer_middleware');
 
 router.post('/', ConversationValidators.createConversation(),RequestValidator.validate(), conversationController.createConversation);
 
+// @desc    Get all conversations
+// @route   GET /api/conversation
 router.get('/', conversationController.getAllConversations);
 
+// @desc   Get conversation by id
+// @route  GET /api/conversation/:id
 router.get('/:id', conversationController.getConversation);
 
 // @desc    Save new message from sender
-// @route   POST /conversation/:id
+// @route   POST /api/conversation/:id
 router.post('/:id', parseMiddleware, ConversationValidators.saveNewSenderMessage(), RequestValidator.validate(), conversationController.saveNewMessage);
 
 // @desc    Generate AI response
-// @route   POST /conversation/:id/generate_ai_response
+// @route   POST /api/conversation/:id/generate_ai_response
 router.get('/:id/generate_ai_response', conversationController.generateAIResponse);
 
 module.exports = router;
