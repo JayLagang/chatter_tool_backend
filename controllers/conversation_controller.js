@@ -103,8 +103,8 @@ exports.saveNewMessage = async (req, res) => {
             }
             return res.status(404).json({ success: false, message: 'Failed to insert new message' });
         }
-
-        return res.status(201).json({ success: true, message: 'Message inserted', message: newMessage });
+        const updatedConversation = await Conversation.getConversation(req.params.id);
+        return res.status(201).json({ success: true, message: 'Message inserted', updatedConversation: updatedConversation });
         
     } catch (error) {
         console.log(error.message);
