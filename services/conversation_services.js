@@ -129,6 +129,32 @@ class Conversation {
             return null;
         }
     }
+
+    async insertModelMessages(data) {
+        try {
+            const result = await prisma.message.createMany({
+                data: data.map((message) => {
+                    return {
+                        conversationId: message.conversationId,
+                        messageIndex: message.messageIndex,
+                        senderRole: 'assistant',
+                        type: message.type,
+                        text: message.type === 'text' ? message.text : undefined,
+                        pictureFromModelUrl: message.type === 'text' ? undefined : message.pictureFromModelUrl
+                    }
+                })
+            });
+
+            if(!result) {
+                return null;
+            }
+
+            return true;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
 }
 
 

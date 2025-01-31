@@ -19,6 +19,10 @@ router.get('/:id', conversationController.getConversation);
 // @route   POST /api/conversation/:id
 router.post('/:id', parseMiddleware, ConversationValidators.saveNewSenderMessage(), RequestValidator.validate(), conversationController.saveNewMessage);
 
+// @desc Save model/ai message
+// @route POST /api/conversation/:id/save_ai_messages
+router.post('/:id/save_ai_messages',  conversationController.saveNewAiMessages);
+
 // @desc    Generate AI response
 // @route   GET /api/conversation/:id/generate_ai_response
 router.get('/:id/generate_ai_response', conversationController.generateAIResponse);

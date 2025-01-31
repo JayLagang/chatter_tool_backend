@@ -112,6 +112,48 @@ exports.saveNewMessage = async (req, res) => {
     }
 };
 
+exports.saveNewAiMessages = async (req, res) => {
+    
+    try {
+
+        const conversation = await Conversation.getConversation(req.params.id);
+        
+        if(!conversation) {
+            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        }
+
+        const newMessages = req.body.messages;
+
+        if(!newMessages || newMessages.length === 0) {
+            return res.status(400).json({ success: false, message: 'Messages are required' });
+        }
+
+        const newMessagesData = newMessages.map(message => {
+            return {
+                conversationId: req.params.id,
+                messageIndex: message.messageIndex,
+                type: message.type,
+                text: message.text,
+                pictureFromModelUrl: message.pictureFromModelUrl
+            }
+        });
+
+        const newMessagesResult = await Conversation.insertModelMessages(newMessagesData);
+
+        if(!newMessagesResult) {
+            return res.status(500).json({ success: false, message: 'Failed to insert messages' });
+        }
+
+        const updatedConversation = await Conversation.getConversation(req.params.id);
+
+        return res.status(201).json({ success: true, message: 'Messages inserted', updatedConversation: updatedConversation });
+        
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ success: false, message: 'Failed to insert messages' });
+    }
+};
+
 exports.generateAIResponse = async (req, res) => {
 
     try {

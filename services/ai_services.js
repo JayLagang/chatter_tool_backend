@@ -151,7 +151,7 @@ class AIService {
                 const response = flirtyResponse.content[i];
                 conversation.messages.push({
                     id: null,
-                    messageIndex: conversation.messages.length + 1,
+                    messageIndex: conversation.messages.length,
                     senderRole: 'assistant',
                     type: response.type,
                     text: response.type === 'text' ? response.content : undefined,
@@ -160,7 +160,7 @@ class AIService {
 
                 aiOnlyResponse.push({
                     id: null,
-                    messageIndex: conversation.messages.length + 1,
+                    messageIndex: conversation.messages.length,
                     senderRole: 'assistant',
                     type: response.type,
                     text: response.type === 'text' ? response.content : undefined,
@@ -170,7 +170,7 @@ class AIService {
             }
         }else{
             conversation.messages.push({
-                messageIndex: conversation.messages.length + 1,
+                messageIndex: conversation.messages.length,
                 senderRole: 'assistant',
                 type: 'text',
                 text: flirtyResponse.content
