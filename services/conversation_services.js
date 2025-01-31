@@ -64,43 +64,43 @@ class Conversation {
         });
     }
 
-    async insertMessage(data) {
-
-        const {conversationId, senderRole, type, text, pictureFromSenderUrl, pictureFromModelUrl} = data;
-        
-        const currentMessagesCount = await prisma.message.count({
-            where: {
-                conversationId: conversationId
-            }
-        });
-
-        const newMessageIndex = currentMessagesCount + 1;
-
-        const result = await prisma.conversation.update({
-            where: {
-                id: conversationId
-            },
-            data: {
-                messages: {
-                    create: {
-                        messageIndex: newMessageIndex,
-                        senderRole: senderRole,
-                        type: type,
-                        text: text,
-                        pictureFromSenderUrl: pictureFromSenderUrl,
-                        pictureFromModelUrl: pictureFromModelUrl
-                    }
+    async insertSenderMessage(data) {
+        const {conversationId, senderRole, type, text, pictureFromSenderUrl, pictureFromModelUrl,pictureFromSenderKey} = data;
+        console.log("data", data);
+        try {
+            console.log("conversationId", conversationId);
+            const currentMessagesCount = await prisma.message.count({
+                where: {
+                    conversationId: conversationId
                 }
-            }
-        });
+            });
 
-        if(!result) {
+            const newMessageIndex = currentMessagesCount + 1;
+
+            const result = await prisma.message.create({
+                data: {
+                    conversationId: conversationId,
+                    messageIndex: newMessageIndex,
+                    senderRole: senderRole,
+                    type: type,
+                    text: text,
+                    pictureFromSenderUrl: pictureFromSenderUrl,
+                    pictureFromModelUrl: pictureFromModelUrl,
+                    pictureFromSenderKey: pictureFromSenderKey
+                }
+            });
+            console.log("result", result);
+
+            return result;
+        } catch (error) {
+            console.log(error);
             return null;
         }
-
-        return result;
     }
 
+    async insertModelMessage(data) {
+        
+    }
 }
 
 

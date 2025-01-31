@@ -21,6 +21,7 @@ model Message {
   text                 String?
   pictureFromSender    PictureFromSender?  @relation(fields: [pictureFromSenderUrl], references: [url])
   pictureFromSenderUrl String?
+  pictureFromSenderKey String?
   pictureFromModel     ModelSamplePicture? @relation(fields: [pictureFromModelUrl], references: [url])
   pictureFromModelUrl  String?
   conversation         Conversation        @relation(fields: [conversationId], references: [id])

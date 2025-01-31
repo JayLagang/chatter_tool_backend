@@ -1,6 +1,6 @@
 const Conversation = require('../services/conversation_services');
 const Model = require('../services/model_services');
-
+const {uploadFileUtil,deleteObject} = require('../utils/s3_files_handler');
 exports.createConversation = async (req, res) => {
 
     try {
@@ -59,29 +59,49 @@ exports.getAllConversations = async (req, res) => {
 };
 
 exports.saveNewSenderMessage = async (req, res) => {
+
     try {
-        console.log(req.files)
-        return res.status(200).json({ success: true, message: req.body });
-        const { type } = req.body;
-        const pictureFromSenderUrl = req.files.pictureFromSenderFile ? req.files.pictureFromSenderFile.location : null;
-        const pictureFromModelUrl = req.files.pictureFromModelFile ? req.files.pictureFromModelFile.location : null;
-
-        const messageData = {
-            conversationId: req.params.id,
-            senderRole: req.body.senderUserName,
-            type: type,
-            text: req.body.message,
-            pictureFromSenderUrl: pictureFromSenderUrl,
-            pictureFromModelUrl: pictureFromModelUrl
-        };
-
-        const conversation = await Conversation.insertMessage(messageData);
-
-        if(!conversation) {
-            return res.status(404).json({ success: false, message: 'Conversation not found' });
+        console.log("req.files.pictureFromSenderFile[0]: ", req.files.pictureFromSenderFile[0])
+        req.uploadFileParams = {
+            file: req.files.pictureFromSenderFile[0],
+            folder: 'sender-sent-pictures',
+            fileSizeLimit: 50
         }
 
-        return res.status(200).json({ success: true, message: 'Message inserted', conversation: conversation });
+        let uploadFileResult;
+
+        if (req.body.type === 'picture'){
+            
+            uploadFileResult = await uploadFileUtil(req);
+
+            if(!uploadFileResult){
+                return res.status(500).json({ success: false, message: 'Failed to upload file' });
+            }
+        }
+        const newMessageData = {
+            conversationId: req.params.id,
+            senderRole: 'user',
+            type: req.body.type,
+            text: req.body?.text || undefined,
+            pictureFromSenderUrl: req.body.type === 'picture' ? uploadFileResult.newObjectUrl : undefined,
+            pictureFromSenderKey: req.body.type === 'picture' ? uploadFileResult.newObjectKey : undefined,
+        };
+
+        const newMessage = await Conversation.insertSenderMessage(newMessageData);
+        
+        if(!newMessage) {
+
+            if(req.body.type === 'picture'){
+                const deleteResult = await deleteObject(uploadFileResult.newObjectKey);
+
+                if(!deleteResult){
+                    console.error('Failed to delete uploaded file');
+                }
+            }
+            return res.status(404).json({ success: false, message: 'Failed to insert new message' });
+        }
+
+        return res.status(201).json({ success: true, message: 'Message inserted', message: newMessage });
         
     } catch (error) {
         console.log(error.message);
