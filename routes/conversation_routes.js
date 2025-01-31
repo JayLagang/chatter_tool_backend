@@ -13,6 +13,6 @@ router.get('/:id', conversationController.getConversation);
 
 // @desc    Save new message from sender
 // @route   POST /conversation/:id
-router.post('/:id', parseMiddleware, ConversationValidators.saveNewSenderMessage(), RequestValidator.validate(), conversationController.saveNewSenderMessage);
+router.post('/:id', parseMiddleware, ConversationValidators.saveNewSenderMessage(), RequestValidator.validate(), conversationController.saveNewMessage);
 
 module.exports = router;

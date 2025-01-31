@@ -18,7 +18,7 @@ exports.createConversation = async (req, res) => {
         
         return res.status(201).json({ success: true,message:'Conversation created', conversation: conversation });
        
-        
+
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({ success: false, message: 'Failed to create conversation' });
@@ -58,40 +58,42 @@ exports.getAllConversations = async (req, res) => {
     }
 };
 
-exports.saveNewSenderMessage = async (req, res) => {
+exports.saveNewMessage = async (req, res) => {
 
     try {
-        console.log("req.files.pictureFromSenderFile[0]: ", req.files.pictureFromSenderFile[0])
-        req.uploadFileParams = {
-            file: req.files.pictureFromSenderFile[0],
-            folder: 'sender-sent-pictures',
-            fileSizeLimit: 50
-        }
 
         let uploadFileResult;
 
-        if (req.body.type === 'picture'){
-            
+        if (req.body.type === 'picture' && req.body.senderRole === 'user'){
+
+            req.uploadFileParams = {
+                file: req.files.pictureFromSenderFile[0],
+                folder: 'sender-sent-pictures',
+                fileSizeLimit: 50
+            }
+
             uploadFileResult = await uploadFileUtil(req);
 
             if(!uploadFileResult){
                 return res.status(500).json({ success: false, message: 'Failed to upload file' });
             }
         }
+
         const newMessageData = {
             conversationId: req.params.id,
-            senderRole: 'user',
+            senderRole: req.body.senderRole,
             type: req.body.type,
             text: req.body?.text || undefined,
             pictureFromSenderUrl: req.body.type === 'picture' ? uploadFileResult.newObjectUrl : undefined,
             pictureFromSenderKey: req.body.type === 'picture' ? uploadFileResult.newObjectKey : undefined,
+            pictureFromModelUrl: req.body.type === 'picture' ?   req.body.pictureFromModelUrl : undefined
         };
 
         const newMessage = await Conversation.insertSenderMessage(newMessageData);
         
         if(!newMessage) {
 
-            if(req.body.type === 'picture'){
+            if(req.body.type === 'picture' && req.body.senderRole === 'user'){
                 const deleteResult = await deleteObject(uploadFileResult.newObjectKey);
 
                 if(!deleteResult){

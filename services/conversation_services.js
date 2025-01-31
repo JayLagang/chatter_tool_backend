@@ -89,7 +89,7 @@ class Conversation {
                     pictureFromSenderKey: pictureFromSenderKey
                 }
             });
-            console.log("result", result);
+            
 
             return result;
         } catch (error) {
@@ -99,7 +99,35 @@ class Conversation {
     }
 
     async insertModelMessage(data) {
-        
+        const {conversationId, type, text, pictureFromModelUrl} = data;
+
+        try {
+
+            const currentMessagesCount = await prisma.message.count({
+                where: {
+                    conversationId: conversationId
+                }
+            });
+
+            const newMessageIndex = currentMessagesCount + 1;
+
+            const result = await prisma.message.create({
+                data: {
+                    conversationId: conversationId,
+                    messageIndex: newMessageIndex,
+                    senderRole: 'assistant',
+                    type: type,
+                    text: type === 'text' ? text : undefined,
+                    pictureFromModelUrl: pictureFromModelUrl
+                }
+            });
+            console.log("result", result);
+
+            return result;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
     }
 }
 
