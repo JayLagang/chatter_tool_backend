@@ -67,7 +67,7 @@ exports.saveNewMessage = async (req, res) => {
         if (req.body.type === 'picture' && req.body.senderRole === 'user'){
 
             req.uploadFileParams = {
-                file: req.files.pictureFromSenderFile[0],
+                file: req.files.image_file[0],
                 folder: 'sender-sent-pictures',
                 fileSizeLimit: 50
             }
