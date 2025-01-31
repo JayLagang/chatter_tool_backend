@@ -195,6 +195,23 @@ class Model {
 
         return result;
     }
+
+    static async getModelSamplePictures(modelId) {
+        const result = await prisma.model.findFirst({
+            where: {
+                id: modelId
+            },
+            include: {
+                samplePictures: true
+            }
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result.samplePictures;
+    }
 }
 
 module.exports = Model;
