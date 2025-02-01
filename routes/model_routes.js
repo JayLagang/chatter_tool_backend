@@ -26,6 +26,10 @@ router.put('/updateAttributes', modelController.updateAttributes)
 // @route   PUT /api/model/addSocialPlatform
 router.put('/addSocialPlatform', modelController.addSocialPlatform)
 
+// @desc Delete a social platform  
+// @route DELETE /api/model/deleteSocialPlatform
+router.delete('/deleteSocialPlatform', modelController.deleteSocialPlatform)
+
 // @desc    Update a social platform
 // @route   PUT /api/model/updateSocialPlatform
 router.put('/updateSocialPlatform', modelController.updateSocialPlatform)

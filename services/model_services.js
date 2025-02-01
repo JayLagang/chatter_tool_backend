@@ -155,6 +155,22 @@ class Model {
         return result;
     }
 
+    static async deleteSocialPlatform(data) {
+        const {id} = data;
+        console.log(id);
+        const result = await prisma.modelSocialAccount.delete({
+            where: {
+                id: id
+            }
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
+
     static async updateSocialPlatform(data) {
         const {id,socialAccountName,link, username} = data;
 

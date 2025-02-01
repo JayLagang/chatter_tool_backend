@@ -71,6 +71,16 @@ exports.addSocialPlatform = async (req, res) => {
     }
 };
 
+exports.deleteSocialPlatform = async (req, res) => {
+    try {
+        const model = await Model.deleteSocialPlatform(req.body);
+        res.json({ success: true, data: model });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ success: false, message: 'Failed to delete social platform' });
+    }
+};
+
 exports.updateSocialPlatform = async (req, res) => {
     try {
         const model = await Model.updateSocialPlatform(req.body);
