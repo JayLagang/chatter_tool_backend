@@ -15,7 +15,9 @@ router.post('/createModel', ModelValidators.createModel(),RequestValidator.valid
 // @desc    Get all models
 // @route   GET /api/model/getAllModels
 router.get('/getAllModels', modelController.getAllModels)
-
+// @desc Update basic details
+// @route PUT /api/model/updateBasicDetails
+router.put('/updateBasicDetails', modelController.updateBasicDetails)
 // @desc    Update a model
 // @route   PUT /api/model/updateModel
 router.put('/updateAttributes', modelController.updateAttributes)

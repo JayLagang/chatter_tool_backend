@@ -83,7 +83,26 @@ class Model {
 
         return result;
     }
+    static async updateBasicDetails(data) {
+        const {userName, firstName, lastName, childCount, age} = data;
+        const result = await prisma.model.update({
+            where: {
+                userName: userName
+            },
+            data: {
+                firstName: firstName,
+                lastName: lastName,
+                childCount: childCount || undefined,
+                age: age || undefined
+            }
+        });
 
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
     static async updateAttributes(data) {
         const {userName, physicalAttributes} = data;
         const {height, weight, bust, waist, skinToneName,ethnicityName} = physicalAttributes;

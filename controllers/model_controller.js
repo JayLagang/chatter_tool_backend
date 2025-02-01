@@ -41,6 +41,16 @@ exports.getAllModels = async (req, res) => {
     }
 };
 
+exports.updateBasicDetails = async (req, res) => {
+    try {
+        const model = await Model.updateBasicDetails(req.body.model);
+        res.json({ success: true, data: model });
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ success: false, message: 'Failed to update basic details' });
+    }
+};
+
 exports.updateAttributes = async (req, res) => {
     try {
         const model = await Model.updateAttributes(req.params.userName, req.body);
