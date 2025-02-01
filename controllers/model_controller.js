@@ -73,7 +73,7 @@ exports.addSocialPlatform = async (req, res) => {
 
 exports.updateSocialPlatform = async (req, res) => {
     try {
-        const model = await Model.updateSocialPlatform(req.params.userName, req.body);
+        const model = await Model.updateSocialPlatform(req.body);
         res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);

@@ -157,25 +157,16 @@ class Model {
     }
 
     static async updateSocialPlatform(data) {
-        const {modelId, platform} = data;
-        const {id,platformName,link, userName} = platform;
-        const result = await prisma.model.update({
+        const {id,socialAccountName,link, username} = data;
+
+        const result = await prisma.modelSocialAccount.update({
             where: {
-                modelId: modelId
+                id: id
             },
             data: {
-                platforms: {
-                    update: {
-                        where: {
-                            id: id
-                        },
-                        data: {
-                            platformName: platformName,
-                            link: link,
-                            userName: userName
-                        }
-                    }
-                }
+                socialAccountName: socialAccountName,
+                link: link,
+                username: username
             }
         });
 
