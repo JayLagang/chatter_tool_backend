@@ -132,18 +132,17 @@ class Model {
     }
 
     static async addSocialPlatform(data) {
-        const {modelId, platform} = data;
-        const {platformName,link, userName} = platform;
+        const {socialAccountName,link, username,modelId} = data;
         const result = await prisma.model.update({
             where: {
-                modelId: modelId
+                id: modelId
             },
             data: {
                 platforms: {
                     create: {
-                        platformName: platformName,
+                        socialAccountName: socialAccountName,
                         link: link,
-                        userName: userName
+                        username: username
                     }
                 }
             }

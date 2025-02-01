@@ -63,7 +63,7 @@ exports.updateAttributes = async (req, res) => {
 
 exports.addSocialPlatform = async (req, res) => {
     try {
-        const model = await Model.addSocialPlatform(req.params.userName, req.body);
+        const model = await Model.addSocialPlatform(req.body);
         res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);
