@@ -119,6 +119,8 @@ CREATE TABLE "Model" (
     "lastName" TEXT,
     "childCount" INTEGER,
     "age" INTEGER,
+    "displayPictureUrl" TEXT,
+    "displayPictureObjectKey" TEXT,
 
     CONSTRAINT "Model_pkey" PRIMARY KEY ("id")
 );
@@ -210,6 +212,12 @@ CREATE UNIQUE INDEX "PictureFromSender_url_key" ON "PictureFromSender"("url");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Model_userName_key" ON "Model"("userName");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Model_displayPictureUrl_key" ON "Model"("displayPictureUrl");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Model_displayPictureObjectKey_key" ON "Model"("displayPictureObjectKey");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ModelPhysicalAttributes_modelId_key" ON "ModelPhysicalAttributes"("modelId");
