@@ -42,6 +42,7 @@ router.post('/:id/sample_picture',parseMiddleware,ModelValidators.uploadSamplePi
 // @route PUT /api/model/:id/sample_picture
 router.put('/:id/sample_picture',ModelValidators.uploadSamplePicture(),RequestValidator.validate(), modelController.updateSamplePicture)
 
+
 // @desc Delete sample picture
 // @route DELETE /api/model/:id/sample_picture
 router.delete('/:id/sample_picture', modelController.deleteSamplePicture)

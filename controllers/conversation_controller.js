@@ -5,7 +5,8 @@ const {uploadFileUtil,deleteObject} = require('../utils/s3_files_handler');
 exports.createConversation = async (req, res) => {
 
     try {
-        const model = await Model.getModel(req.body.conversation.modelUserName);
+
+        const model = await Model.getModel({userName: req.body.conversation.modelUserName});
 
         if(!model) {
             return res.status(404).json({ success: false, message: 'Model not found' });

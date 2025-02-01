@@ -14,11 +14,6 @@ class Conversation {
                     connect: {
                         userName: modelUserName
                     }
-                },
-                samplePictures: samplePictureIds.length === 0 ? undefined : {
-                    connect: samplePictureIds.map((id) => {
-                        return {id: id};
-                    })
                 }
             }
         });

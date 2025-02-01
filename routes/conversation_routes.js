@@ -5,6 +5,9 @@ const RequestValidator = require('../validators/request_validator');
 const conversationController = require('../controllers/conversation_controller');
 const parseMiddleware = require('../middlewares/multer_middleware');
 
+
+// @desc    Create a conversation
+// @route   POST /api/conversation
 router.post('/', ConversationValidators.createConversation(),RequestValidator.validate(), conversationController.createConversation);
 
 // @desc    Get all conversations

@@ -49,6 +49,7 @@ class Model {
 
     static async getModel(data) {
         const {userName} = data;
+        console.log(userName);
         const result = await prisma.model.findUnique({
             where: {
                 userName: userName
@@ -202,7 +203,7 @@ class Model {
             data: {
                 samplePictures: {
                     create: {
-                        vaginaColorName: vaginaColorName,
+                        vaginaColorName: vaginaColorName === undefined || vaginaColorName === 'undefined' ? null : vaginaColorName,
                         bodyPartName: bodyPartName,
                         pictureFramingName: pictureFramingName,
                         url: uploadFileResult.newObjectUrl,
