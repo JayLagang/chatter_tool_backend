@@ -23,7 +23,7 @@ exports.createModel = async (req, res) => {
 
 exports.getModel = async (req, res) => {
     try {
-        const model = await Model.getModel(req.params);
+        const model = await Model.getModel(req.query);
         return res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);

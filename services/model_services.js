@@ -49,7 +49,7 @@ class Model {
 
     static async getModel(data) {
         const {userName} = data;
-        const result = await prisma.model.findFirst({
+        const result = await prisma.model.findUnique({
             where: {
                 userName: userName
             },
@@ -59,7 +59,7 @@ class Model {
                 physicalAttributes: true
             }
         });
-
+        // console.log(result);
         if(!result) {
             return null;
         }
