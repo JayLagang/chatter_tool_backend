@@ -53,7 +53,7 @@ exports.updateBasicDetails = async (req, res) => {
 
 exports.updateAttributes = async (req, res) => {
     try {
-        const model = await Model.updateAttributes(req.params.userName, req.body);
+        const model = await Model.updateAttributes(req.body);
         res.json({ success: true, data: model });
     } catch (error) {
         console.log(error.message);

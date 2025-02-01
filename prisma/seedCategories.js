@@ -20,6 +20,8 @@ async function main(){
         const citizenship = JSON.parse(citizenshipData)
         const englishProficiencyLevelData = await fs.readFile(path.join(__dirname, './data/english_proficiency_level.json'), 'utf-8');
         const englishProficiency = JSON.parse(englishProficiencyLevelData)
+        const ethnicitieData = await fs.readFile(path.join(__dirname, './data/ethnicity.json'), 'utf-8')
+        const ethnicity = JSON.parse(ethnicitieData)
 
         console.log('Seeding body parts...');
         await seedBodyParts(prisma, bodyParts, true);
@@ -29,6 +31,9 @@ async function main(){
 
         console.log('Seeding Social Platforms...')
         await seedSocialPlatforms(prisma,socialPlatforms, true)
+
+        console.log('Seeding Ethinicities...')
+        await seedEthnicities(prisma, ethnicity, true)
 
         console.log('Seeding vgna colors')
         await seedVaginaColors(prisma,vaginaColors, true)
@@ -114,6 +119,29 @@ async function seedSocialPlatforms(prisma, socialPlatforms, deleteAll) {
     }
 
     console.log('Social platforms seeded successfully');
+}
+
+async function seedEthnicities(prisma, ethnicities, deleteAll) {
+    // Ensure the model name matches the one in your Prisma schema
+    if (deleteAll===true) {
+        await prisma.ethnicity.deleteMany();
+    }
+
+    for (const ethnicity of ethnicities) {
+        const newEthnicity = await prisma.ethnicity.create({
+            data: {
+                name: ethnicity.name
+            }
+        });
+        if(newEthnicity) {
+            console.log(`Ethnicity ${ethnicity.name} seeded successfully`);
+        } else {
+            console.error(`Failed seeding ${ethnicity.name}`);
+        }
+
+    }
+
+    console.log('Ethnicities seeded successfully');
 }
 
 async function seedSkinTones(prisma, skinTones, deleteAll) {

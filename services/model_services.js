@@ -104,11 +104,10 @@ class Model {
         return result;
     }
     static async updateAttributes(data) {
-        const {userName, physicalAttributes} = data;
-        const {height, weight, bust, waist, skinToneName,ethnicityName} = physicalAttributes;
+        const {modelId,height, weight, bust, waist, skinToneName,ethnicityName} = data;
         const result = await prisma.model.update({
             where: {
-                userName: userName
+                id: modelId
             },
             data: {
                 physicalAttributes: {

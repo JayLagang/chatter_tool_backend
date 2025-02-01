@@ -19,7 +19,7 @@ router.get('/getAllModels', modelController.getAllModels)
 // @route PUT /api/model/updateBasicDetails
 router.put('/updateBasicDetails', modelController.updateBasicDetails)
 // @desc    Update a model
-// @route   PUT /api/model/updateModel
+// @route   PUT /api/model/updateAttributes
 router.put('/updateAttributes', modelController.updateAttributes)
 
 // @desc    Add a social platform
