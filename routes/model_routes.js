@@ -38,4 +38,8 @@ router.put('/updateSocialPlatform', modelController.updateSocialPlatform)
 // @route POST /api/model/:id/sample_picture
 router.post('/:id/sample_picture',parseMiddleware,ModelValidators.uploadSamplePicture(),RequestValidator.validate(), modelController.uploadSamplePicture)
 
+// @desc Update sample picture data
+// @route PUT /api/model/:id/sample_picture
+router.put('/:id/sample_picture',ModelValidators.uploadSamplePicture(),RequestValidator.validate(), modelController.updateSamplePicture)
+
 module.exports = router;

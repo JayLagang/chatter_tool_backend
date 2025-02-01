@@ -135,3 +135,34 @@ exports.uploadSamplePicture = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Failed to upload sample picture' });
     }
 };
+
+exports.updateSamplePicture = async (req, res) => {
+    const modelId = req.params.id;
+    try {
+
+        if(!modelId){
+            return res.status(400).json({ success: false, message: 'Model id is required' });
+        }
+
+        req.body.modelId = modelId;
+        
+        const consolidatedDescription = await AIService.generateConsolidatedDescription({
+            pictureFramingName: req.body.pictureFramingName,
+            bodyPartName: req.body.bodyPartName,
+            vaginaColorName: req.body.vaginaColorName || null
+        });
+
+        if(!consolidatedDescription) {
+            return res.status(500).json({ success: false, message: 'Failed to generate consolidated description' });
+        }
+        req.body.consolidatedDescription = consolidatedDescription;
+
+        const model = await Model.updateSamplePicture(req.body);
+        
+        res.json({ success: true, message:"Sample picture updated", data: model });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: 'Failed to update sample picture' });
+    }
+}

@@ -219,7 +219,29 @@ class Model {
 
         return result;
     }
+    static async updateSamplePicture(data) {
+        
+        const {id, vaginaColorName, bodyPartName,pictureFramingName,consolidatedDescription} = data;
 
+        const result = await prisma.modelSamplePicture.update({
+            where: {
+                id: id
+            },
+            data: {
+                bodyPartName: bodyPartName,
+                pictureFramingName: pictureFramingName,
+                vaginaColorName: vaginaColorName ? vaginaColorName : null,
+                consolidatedDescription: consolidatedDescription
+            }
+
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
     static async getModelSamplePictures(modelId) {
         const result = await prisma.model.findFirst({
             where: {
