@@ -59,7 +59,7 @@ class Model {
                 physicalAttributes: true
             }
         });
-        // console.log(result);
+
         if(!result) {
             return null;
         }
@@ -156,7 +156,7 @@ class Model {
 
     static async deleteSocialPlatform(data) {
         const {id} = data;
-        console.log(id);
+
         const result = await prisma.modelSocialAccount.delete({
             where: {
                 id: id
@@ -220,7 +220,7 @@ class Model {
         return result;
     }
     static async updateSamplePicture(data) {
-        
+
         const {id, vaginaColorName, bodyPartName,pictureFramingName,consolidatedDescription} = data;
 
         const result = await prisma.modelSamplePicture.update({
@@ -234,6 +234,21 @@ class Model {
                 consolidatedDescription: consolidatedDescription
             }
 
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result;
+    }
+    static async deleteSamplePicture(data) {
+        const {samplePictureId} = data;
+
+        const result = await prisma.modelSamplePicture.delete({
+            where: {
+                id: samplePictureId
+            }
         });
 
         if(!result) {

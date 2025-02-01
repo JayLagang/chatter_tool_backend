@@ -120,7 +120,7 @@ exports.uploadSamplePicture = async (req, res) => {
             bodyPartName: req.body.bodyPartName,
             vaginaColorName: req.body.vaginaColorName || null
         });
-        console.log("consolidatedDescription",consolidatedDescription);
+
         if(!consolidatedDescription) {
             return res.status(500).json({ success: false, message: 'Failed to generate consolidated description' });
         }
@@ -164,5 +164,33 @@ exports.updateSamplePicture = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: 'Failed to update sample picture' });
+    }
+}
+
+exports.deleteSamplePicture = async (req, res) => {
+
+    try {
+
+        if(!req.body.objectKey){
+            return res.status(400).json({ success: false, message: 'Object key is required' });
+        }
+
+        const deleteFileResult = await deleteObject(req.body.objectKey);
+
+        if(!deleteFileResult){
+            return res.status(500).json({ success: false, message: 'Failed to delete file' });
+        }
+
+        const model = await Model.deleteSamplePicture(req.body);
+
+        if(!model) {
+            return res.status(500).json({ success: false, message: 'Failed to delete sample picture' });
+        }
+
+        res.json({ success: true, message:"Sample picture deleted", data: model });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: 'Failed to delete sample picture' });
     }
 }

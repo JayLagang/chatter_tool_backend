@@ -260,7 +260,7 @@ const deleteObject = async (key) => {
 		const result = await newS3Client.send(deleteObjectCommand);
 		return result;
 	} catch (err) {
-		throw new ErrorResponse('Error deleting profile avatar', 500);
+		return null;
 	}
 };
 
