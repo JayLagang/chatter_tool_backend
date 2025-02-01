@@ -3,7 +3,7 @@ model Conversation {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   senderUserName String    @unique
-  model          Model     @relation(fields: [modelUserName], references: [userName])
+  model          Model     @relation(fields: [modelUserName], references: [userName], onDelete: Cascade)
   modelUserName  String
   messages       Message[]
 
@@ -19,12 +19,12 @@ model Message {
   senderRole           Role
   type                 MessageType
   text                 String?
-  pictureFromSender    PictureFromSender?  @relation(fields: [pictureFromSenderUrl], references: [url])
+  pictureFromSender    PictureFromSender?  @relation(fields: [pictureFromSenderUrl], references: [url], onDelete: Cascade)
   pictureFromSenderUrl String?
   pictureFromSenderKey String?
-  pictureFromModel     ModelSamplePicture? @relation(fields: [pictureFromModelUrl], references: [url])
+  pictureFromModel     ModelSamplePicture? @relation(fields: [pictureFromModelUrl], references: [url], onDelete: Cascade)
   pictureFromModelUrl  String?
-  conversation         Conversation        @relation(fields: [conversationId], references: [id])
+  conversation         Conversation        @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId       String
 
   @@index([pictureFromModelUrl])

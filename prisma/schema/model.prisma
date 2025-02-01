@@ -1,16 +1,18 @@
 model Model {
-  id                 String                   @id @default(cuid())
-  createdAt          DateTime                 @default(now())
-  updatedAt          DateTime                 @updatedAt
-  userName           String                   @unique
-  firstName          String?
-  lastName           String?
-  childCount         Int?
-  age                Int?
-  platforms          ModelSocialAccount[]
-  conversation       Conversation[]
-  samplePictures     ModelSamplePicture[]
-  physicalAttributes ModelPhysicalAttributes?
+  id                      String                   @id @default(cuid())
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  userName                String                   @unique
+  firstName               String?
+  lastName                String?
+  childCount              Int?
+  age                     Int?
+  displayPictureUrl       String?                  @unique
+  displayPictureObjectKey String?                  @unique
+  platforms               ModelSocialAccount[]
+  conversation            Conversation[]
+  samplePictures          ModelSamplePicture[]
+  physicalAttributes      ModelPhysicalAttributes?
 }
 
 model ModelPhysicalAttributes {
@@ -19,11 +21,11 @@ model ModelPhysicalAttributes {
   weight        Int?
   bust          Int?
   waist         Int?
-  model         Model      @relation(fields: [modelId], references: [id])
+  model         Model      @relation(fields: [modelId], references: [id], onDelete: Cascade)
   modelId       String     @unique
-  skinTone      SkinTone?  @relation(fields: [skinToneName], references: [name])
+  skinTone      SkinTone?  @relation(fields: [skinToneName], references: [name], onDelete: Cascade)
   skinToneName  String?
-  ethnicity     Ethnicity? @relation(fields: [ethnicityName], references: [name])
+  ethnicity     Ethnicity? @relation(fields: [ethnicityName], references: [name], onDelete: Cascade)
   ethnicityName String?
 
   @@index([ethnicityName])
@@ -37,10 +39,10 @@ model ModelSamplePicture {
   objectKey               String
   createdAt               DateTime       @default(now())
   updatedAt               DateTime       @updatedAt
-  model                   Model          @relation(fields: [modelId], references: [id])
-  framing                 PictureFraming @relation(fields: [pictureFramingName], references: [name])
-  exposedPart             BodyPart       @relation(fields: [bodyPartName], references: [name])
-  vaginaColor             VaginaColor?   @relation(fields: [vaginaColorName], references: [name])
+  model                   Model          @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  framing                 PictureFraming @relation(fields: [pictureFramingName], references: [name], onDelete: Cascade)
+  exposedPart             BodyPart       @relation(fields: [bodyPartName], references: [name], onDelete: Cascade)
+  vaginaColor             VaginaColor?   @relation(fields: [vaginaColorName], references: [name], onDelete: Cascade)
   vaginaColorName         String?
   bodyPartName            String
   pictureFramingName      String
@@ -58,11 +60,11 @@ model ModelSocialAccount {
   id                String            @id @default(cuid())
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
-  socialAccountType SocialAccountType @relation(fields: [socialAccountName], references: [name])
+  socialAccountType SocialAccountType @relation(fields: [socialAccountName], references: [name], onDelete: Cascade)
   socialAccountName String
   username          String
   link              String
-  model             Model             @relation(fields: [modelId], references: [id])
+  model             Model             @relation(fields: [modelId], references: [id], onDelete: Cascade)
   modelId           String
 
   @@index([modelId])
