@@ -79,7 +79,26 @@ exports.saveNewMessage = async (req, res) => {
             if(!uploadFileResult){
                 return res.status(500).json({ success: false, message: 'Failed to upload file' });
             }
+
+            // analyze the image using the AIService.analyzeImageSuggestiveness function
+            const imageAnalysis = await AIService.analyzeImageSuggestiveness(uploadFileResult.newObjectUrl);
+
+            if(imageAnalysis.status !== 'success') {
+                return res.status(500).json({ success: false, message: 'Failed to analyze image' });
+            }
+            
+            req.body.formattedUserSentImageAnalysis = {
+                very_suggestive: imageAnalysis.nudity.very_suggestive,
+                suggestive: imageAnalysis.nudity.suggestive,
+                mildly_suggestive: imageAnalysis.nudity.mildly_suggestive,
+                sexual_activity: imageAnalysis.nudity.sexual_activity,
+                sexual_display: imageAnalysis.nudity.sexual_display,
+                erotica: imageAnalysis.nudity.erotica,
+                context: imageAnalysis.nudity.context
+            };
         }
+
+        
 
         const newMessageData = {
             conversationId: req.params.id,
@@ -88,7 +107,8 @@ exports.saveNewMessage = async (req, res) => {
             text: req.body?.text || undefined,
             pictureFromSenderUrl: req.body.type === 'picture' ? uploadFileResult.newObjectUrl : undefined,
             pictureFromSenderKey: req.body.type === 'picture' ? uploadFileResult.newObjectKey : undefined,
-            pictureFromModelUrl: req.body.type === 'picture' ?   req.body.pictureFromModelUrl : undefined
+            pictureFromModelUrl: req.body.type === 'picture' ?   req.body.pictureFromModelUrl : undefined,
+            formattedUserSentImageAnalysis: req.body.formattedUserSentImageAnalysis || undefined
         };
 
         const newMessage = await Conversation.insertSenderMessage(newMessageData);

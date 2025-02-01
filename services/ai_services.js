@@ -4,7 +4,7 @@ dotenv.config();
 const openai = new OpenAI({
     apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY
 });
-  
+const axios = require('axios');
 class AIService {
     static formatImageDescriptions(images) {
         return images.map((img, index) => {
@@ -133,6 +133,16 @@ class AIService {
     }
 
     static async analyzeImageSuggestiveness(imageUrl){
+        const result = await axios.get('https://api.sightengine.com/1.0/check.json', {
+            params: {
+                'url': imageUrl,
+                'models': 'nudity-2.1',
+                'api_user': process.env.SIGHTENGINE_API_USER,
+                'api_secret': process.env.SIGHTENGINE_API_SECRET,
+            }
+        });
+
+        return result.data;
 
     }
     static async lastMessageIsFromUser(messages) {

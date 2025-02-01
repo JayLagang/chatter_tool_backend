@@ -60,8 +60,8 @@ class Conversation {
     }
 
     async insertSenderMessage(data) {
-        const {conversationId, senderRole, type, text, pictureFromSenderUrl, pictureFromModelUrl,pictureFromSenderKey} = data;
-
+        const {conversationId, senderRole, type, text, pictureFromSenderUrl, pictureFromModelUrl,pictureFromSenderKey,formattedUserSentImageAnalysis} = data;
+        console.log(formattedUserSentImageAnalysis)
         try {
 
             const currentMessagesCount = await prisma.message.count({
@@ -81,7 +81,8 @@ class Conversation {
                     text: type === 'text' ? text : undefined,
                     pictureFromSenderUrl: pictureFromSenderUrl,
                     pictureFromModelUrl: pictureFromModelUrl,
-                    pictureFromSenderKey: pictureFromSenderKey
+                    pictureFromSenderKey: pictureFromSenderKey,
+                    pictureFromSenderAnalysis: formattedUserSentImageAnalysis
                 }
             });
             
