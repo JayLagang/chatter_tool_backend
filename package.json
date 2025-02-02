@@ -9,6 +9,7 @@
     "db:studio": "npx prisma studio",
     "db:migrate": "npx prisma migrate dev --name init",
     "db:reset": "npx prisma format && rm -rf prisma/migrations && npx prisma migrate reset --force  && npx prisma db push --accept-data-loss && npx prisma migrate dev --name init && npx prisma generate && node prisma/seedCategories.js",
+    "system:restart": "sudo systemctl disable myapp.service && sudo systemctl stop myapp.service && sudo systemctl daemon-reload && sudo systemctl enable myapp.service && sudo systemctl start myapp.service && sudo systemctl restart caddy",
     "db:push": "npx prisma db push"
   },
   "keywords": [],
