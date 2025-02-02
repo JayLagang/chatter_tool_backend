@@ -189,9 +189,9 @@ exports.generateAIResponse = async (req, res) => {
         if(!lastMessageIsFromUser){
             return res.status(400).json({ success: false, message: 'Unable to generate. Last message is not from user' });
         }
-        const modelSamplePictures = await Model.getModelSamplePictures(conversation.model.id);
- 
-        const response = await AIService.generateAIResponse(conversation,modelSamplePictures);
+        // const modelSamplePictures = await Model.getModelSamplePictures(conversation.model.id);
+        const model = await Model.getModelById({modelId: conversation.model.id});
+        const response = await AIService.generateAIResponse(conversation,model);
         
         if(!response) {
             return res.status(500).json({ success: false, message: 'Failed to generate AI response' });

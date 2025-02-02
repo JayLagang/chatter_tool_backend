@@ -48,7 +48,8 @@ class Conversation {
                         messageIndex: 'asc'
                     }
                 },
-                model: true
+                model: true,
+                samplePictures: true
             }
         });
     }
