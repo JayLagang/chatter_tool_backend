@@ -43,4 +43,5 @@ model SocialAccountType {
   id                 Int                  @id @default(autoincrement())
   name               String               @unique
   modelSocialAccount ModelSocialAccount[]
+  conversation       Conversation[]
 }

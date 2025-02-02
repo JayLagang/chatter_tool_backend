@@ -1,12 +1,16 @@
 model Conversation {
-  id             String    @id @default(cuid())
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  senderUserName String    @unique
-  model          Model     @relation(fields: [modelUserName], references: [userName], onDelete: Cascade)
+  id             String               @id @default(cuid())
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  senderUserName String               @unique
+  model          Model                @relation(fields: [modelUserName], references: [userName], onDelete: Cascade)
   modelUserName  String
+  platform       SocialAccountType    @relation(fields: [platformName], references: [name], onDelete: Cascade)
+  platformName   String
+  samplePictures ModelSamplePicture[]
   messages       Message[]
 
+  @@index([platformName])
   @@index([modelUserName])
 }
 

@@ -49,6 +49,7 @@ model ModelSamplePicture {
   consolidatedDescription String
   modelId                 String
   message                 Message[]
+  conversation            Conversation[]
 
   @@index([modelId])
   @@index([vaginaColorName])
