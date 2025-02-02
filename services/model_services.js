@@ -69,6 +69,26 @@ class Model {
 
     }
 
+    static async getModelById(data) {
+        const {modelId} = data;
+        const result = await prisma.model.findUnique({
+            where: {
+                id: modelId
+            },
+            include: {
+                platforms: true,
+                samplePictures: true,
+                physicalAttributes: true
+            }
+        });
+
+        if(!result) {
+            return null;
+        }
+
+        return result
+    }
+
     static async getAllModels() {
         const result = await prisma.model.findMany({
             include: {
@@ -105,18 +125,19 @@ class Model {
         return result;
     }
     static async updateAttributes(data) {
-        const {modelId,height, weight, bust, waist, skinToneName,ethnicityName} = data;
+        const {id,height, weight, bust, waist, skinToneName,ethnicityName} = data;
+        console.log(data)
         const result = await prisma.model.update({
             where: {
-                id: modelId
+                id: id
             },
             data: {
                 physicalAttributes: {
                     update: {
-                        height: height,
-                        weight: weight,
-                        bust: bust,
-                        waist: waist,
+                        height: height === 0 ? null : parseInt(height),
+                        weight: weight === 0 ? null : parseInt(weight),
+                        bust: bust === 0 ? null : parseInt(bust),
+                        waist: waist === 0 ? null : parseInt(waist),
                         skinToneName: skinToneName,
                         ethnicityName: ethnicityName
                     }
