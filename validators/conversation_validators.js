@@ -4,6 +4,7 @@ class ConversationValidators {
     createConversation() {
         return [
             body('conversation.senderUserName').notEmpty().withMessage('Sender username is required').isString().withMessage('Sender username is required'),
+            body('conversation.platformName').notEmpty().withMessage('Platform name is required').isString().withMessage('Platform name must be a string'),
             body('conversation.modelUserName').notEmpty().withMessage('Model username is required').isString().withMessage('Model username must be a string'),
             body('conversation.samplePictureIds').optional().isArray().withMessage('Sample picture ids must be an array'),
         ];

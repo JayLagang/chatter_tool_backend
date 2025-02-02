@@ -5,7 +5,7 @@ class Conversation {
 
     async createConversation(data) {
         
-        const {senderUserName, modelUserName, samplePictureIds} = data;
+        const {senderUserName, modelUserName, samplePictureIds, platformName} = data;
 
         const result = await prisma.conversation.create({
             data: {
@@ -14,6 +14,18 @@ class Conversation {
                     connect: {
                         userName: modelUserName
                     }
+                },
+                platform: {
+                    connect: {
+                        name: platformName
+                    }
+                },
+                samplePictures: {
+                    connect: samplePictureIds.map((id) => {
+                        return {
+                            id: id
+                        }
+                    })
                 }
             }
         });

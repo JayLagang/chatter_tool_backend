@@ -14,7 +14,7 @@ router.get('/picture_framings', categoryController.getAllPictureFramings)
 
 router.get('/body_parts', categoryController.getAllBodyParts)
 
-router.get('/social_platforms', categoryController.getAllSocialPlatforms)
+// router.get('/social_platforms', categoryController.getAllSocialPlatforms)
 
 router.get('/citizenship', categoryController.getAllCitizenships)
 
