@@ -5,6 +5,7 @@ const aiRoutes = require('./routes/ai_routes');
 const categoryRoutes = require('./routes/category_routes');
 const modelRoutes = require('./routes/model_routes');
 const conversationRoutes = require('./routes/conversation_routes');
+const spooferRoutes = require('./routes/spoofer_routes');
 const app = express();
 
 // Middleware
@@ -22,7 +23,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/model', modelRoutes);
 app.use('/api/conversation', conversationRoutes);
-
+app.use('/api/spoofer', spooferRoutes);
 
 const PORT = process.env.PORT;
 

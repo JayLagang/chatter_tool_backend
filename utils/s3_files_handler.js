@@ -22,6 +22,7 @@ const singleFileUploadHandler = async (fieldName, req, res) => {
 			if (err) {
 				reject(err);
 			} else {
+				console.log(req.file)
 				resolve(req.file);
 			}
 		});

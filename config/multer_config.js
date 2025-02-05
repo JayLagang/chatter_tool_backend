@@ -27,12 +27,12 @@ const fileFilter = (req, file, cb) => {
 		);
 	}
 };
-
+// file size limit is 40MB
 const upload = multer({
 	storage: storage,
 	fileFilter: fileFilter,
 	limits: {
-		fileSize: 10 * 1024 * 1024, // Increased limit to 10MB to accommodate larger documents
+		fileSize: 40 * 1024 * 1024,
 	},
 });
 
