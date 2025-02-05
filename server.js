@@ -18,10 +18,10 @@ app.use(cors(
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Set request timeout to 5 minutes (300000 milliseconds)
+// Set request timeout to 10 minutes (600000 milliseconds)
 app.use((req, res, next) => {
     if (req.url === '/api/spoofer/spoof-image') {
-        req.setTimeout(300000); // 5 minutes
+        req.setTimeout(600000); // 10 minutes
     }
     next();
 });
