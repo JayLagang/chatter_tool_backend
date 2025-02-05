@@ -1,8 +1,6 @@
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
-const path = require('path');
-
+const {prisma} = require('../config/database');
 const randomWords = ['apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon', 'mango', 'nectarine', 'orange', 'papaya', 'quince', 'raspberry', 'strawberry', 'tangerine', 'watermelon', 'avocado', 'blackberry', 'coconut', 'dragonfruit', 'eggplant', 'fennel', 'guava', 'huckleberry', 'jackfruit', 'kumquat', 'lychee', 'mulberry', 'nectarine', 'olive', 'pomegranate', 'quince', 'rhubarb', 'starfruit', 'tamarind', 'ugli', 'vanilla', 'watercress', 'yam', 'zucchini', 'almond', 'blackberry', 'cashew', 'date', 'elderberry', 'fig', 'grapefruit', 'hazelnut', 'jackfruit', 'kiwi', 'lemon', 'mango', 'nectarine', 'orange', 'papaya', 'quince', 'raspberry', 'strawberry', 'tangerine', 'watermelon', 'avocado', 'blackberry', 'coconut', 'dragonfruit', 'eggplant', 'fennel', 'guava', 'huckleberry', 'jackfruit', 'kumquat'];
 
 const verbs = [
@@ -17,10 +15,10 @@ const verbs = [
 
 exports.generateSpoofedImages = async (req, res) => {
     try {
-        console.log(req.files.image_file)
+    
         const imageFile = req.files.image_file[0];
         const imageBuffer = imageFile.buffer;
-        const copyCount = req.body.copyCount || 5;
+        const copyCount = parseInt(req.body.copy_count) || 5;
         const variations = [];
 
         // Get original image metadata
@@ -67,7 +65,14 @@ exports.generateSpoofedImages = async (req, res) => {
             // Add the base64 data along with the filename to the response
             variations.push({ filename, base64 });
         }
-
+        // create a new record in the database
+        await prisma.spooferRequest.create({
+            data: {
+                requestedSpoofedImage: parseInt(copyCount),
+                clientIp: req.ip,
+            }
+        });
+        // console.log(req.ip)
         res.json({ images: variations });
     } catch (error) {
         console.error('Image processing error:', error);

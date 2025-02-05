@@ -1,0 +1,7 @@
+model SpooferRequest {
+    id                    Int      @id @default(autoincrement())
+    requestedSpoofedImage Int
+    clientIp              String
+    createdAt             DateTime @default(now())
+    updatedAt             DateTime @updatedAt
+}
