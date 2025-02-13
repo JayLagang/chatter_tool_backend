@@ -43,11 +43,18 @@ app.use('/api/jobs', jobRoutes); // New route for job status
 
 const PORT = process.env.PORT;
 
-// console.log the memory usage every 10 seconds
-setInterval(() => {
-    const used = process.memoryUsage().heapUsed / 1024 / 1024;
-    console.log(`Memory usage: ${Math.round(used * 100) / 100} MB`);
-}, 10000);
+// Health check
+app.get('/health', (req, res) => {
+    res.send('OK');
+});
+
+// Error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+// Log the number of jobs in the queue and the memory usage of that process every 10 seconds
 
 // console.log the number of jobs in the queue and the memory usage of that process every 10 seconds
 setInterval(async () => {
