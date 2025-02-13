@@ -1,6 +1,6 @@
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
-const {prisma} = require('../config/database');
+const { prisma } = require('../config/database');
 const randomWords = ['apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon', 'mango', 'nectarine', 'orange', 'papaya', 'quince', 'raspberry', 'strawberry', 'tangerine', 'watermelon', 'avocado', 'blackberry', 'coconut', 'dragonfruit', 'eggplant', 'fennel', 'guava', 'huckleberry', 'jackfruit', 'kumquat', 'lychee', 'mulberry', 'nectarine', 'olive', 'pomegranate', 'quince', 'rhubarb', 'starfruit', 'tamarind', 'ugli', 'vanilla', 'watercress', 'yam', 'zucchini', 'almond', 'blackberry', 'cashew', 'date', 'elderberry', 'fig', 'grapefruit', 'hazelnut', 'jackfruit', 'kiwi', 'lemon', 'mango', 'nectarine', 'orange', 'papaya', 'quince', 'raspberry', 'strawberry', 'tangerine', 'watermelon', 'avocado', 'blackberry', 'coconut', 'dragonfruit', 'eggplant', 'fennel', 'guava', 'huckleberry', 'jackfruit', 'kumquat'];
 
 const verbs = [
@@ -12,13 +12,14 @@ const verbs = [
     "paint", "draw", "organize", "clean", "cook"
 ];
 
-
-exports.generateSpoofedImages = async (req, res) => {
+exports.generateSpoofedImages = async (job) => {
     try {
-    
-        const imageFile = req.files.image_file[0];
-        const imageBuffer = imageFile.buffer;
-        const copyCount = parseInt(req.body.copy_count) || 5;
+
+        const { files, body } = job.data;
+        const ip = body.client_ip;
+        const imageFile = files.image_file[0];
+        const imageBuffer = Buffer.from(imageFile.buffer.data);
+        const copyCount = parseInt(body.copy_count) || 5;
         const variations = [];
 
         // Get original image metadata
@@ -40,10 +41,10 @@ exports.generateSpoofedImages = async (req, res) => {
             let img = sharp(imageBuffer);
 
             // Apply subtle, random modifications
-            const contrast = 0.85 + Math.random() * 0.6; // Random contrast between 0.85 and 1.45
+            const contrast = 0.85 + Math.random() * 0.3; // Random contrast between 0.85 and 1.15
             const brightness = 0.9 + Math.random() * 0.2; // Random brightness between 0.9 and 1.1
-            const saturation = 0.8 + Math.random() * 0.6; // Random saturation between 0.8 and 1.4
-            const sharpness = Math.random() * 2; // Random sharpness effect (more variation)
+            const saturation = 1 + Math.random() * 0.3; // Random saturation between 1 and 1.3
+            const sharpness = Math.random() * 1; // Random sharpness between 0 and 1
 
             // Apply minor resize (±7% of original size)
             const newWidth = Math.round(width * (0.93 + Math.random() * 0.1));
@@ -69,13 +70,12 @@ exports.generateSpoofedImages = async (req, res) => {
         await prisma.spooferRequest.create({
             data: {
                 requestedSpoofedImage: parseInt(copyCount),
-                clientIp: req.ip,
+                clientIp: ip,
             }
         });
-        // console.log(req.ip)
-        res.json({ images: variations });
+        return { images: variations };
     } catch (error) {
         console.error('Image processing error:', error);
-        res.status(500).json({ error: 'Image processing failed' });
+        throw new Error('Image processing failed');
     }
 };
