@@ -12,7 +12,6 @@ const spoofQueue = new Queue('spoofQueue', { connection });
 router.get('/:jobId/status', async (req, res) => {
     try {
         const job = await Job.fromId(spoofQueue, req.params.jobId);
-        console.log('Job:', job);
         if (job) {
             const state = await job.getState();
             res.json({ status: state });
