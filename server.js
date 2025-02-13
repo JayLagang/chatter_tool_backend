@@ -32,13 +32,6 @@ const spoofQueue = new Queue('spoofQueue', { connection });
 // Import worker to initialize it
 require('./workers/spoofer_worker');
 
-// Set request timeout to 10 minutes (600000 milliseconds)
-app.use((req, res, next) => {
-    if (req.url === '/api/spoofer/spoof-image') {
-        req.setTimeout(600000); // 10 minutes
-    }
-    next();
-});
 
 // Routes
 app.use('/api/ai', aiRoutes);
