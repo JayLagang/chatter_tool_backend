@@ -7,7 +7,7 @@ const modelRoutes = require('./routes/model_routes');
 const conversationRoutes = require('./routes/conversation_routes');
 const spooferRoutes = require('./routes/spoofer_routes');
 const jobRoutes = require('./routes/job_routes'); // New route for job status
-const { Queue } = require('bullmq');
+const { Queue, Worker } = require('bullmq');
 const Redis = require('ioredis');
 const app = express();
 
@@ -19,7 +19,11 @@ app.use(cors(
     }
 ));
 app.use(express.json());
-app.use(morgan('dev'));
+if (process.env.NODE_ENV !== 'production') {
+    app.use(morgan('dev')); // Use verbose logging only in development
+} else {
+    app.use(morgan('tiny')); // Use less verbose logging in production
+}
 
 // Redis connection
 const connection = new Redis({
@@ -29,9 +33,13 @@ const connection = new Redis({
 // BullMQ queue
 const spoofQueue = new Queue('spoofQueue', { connection });
 
+// Worker to process jobs
+const worker = new Worker('spoofQueue', async job => {
+    // Process job here
+}, { connection });
+
 // Import worker to initialize it
 require('./workers/spoofer_worker');
-
 
 // Routes
 app.use('/api/ai', aiRoutes);
@@ -41,11 +49,11 @@ app.use('/api/conversation', conversationRoutes);
 app.use('/api/spoofer', spooferRoutes);
 app.use('/api/jobs', jobRoutes); // New route for job status
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000; // Default to port 8000 if not specified
 
 // Health check
 app.get('/health', (req, res) => {
-    res.send('OK');
+    res.send({ message: 'Server is running', jobs: 'Jobs in queue: ' + spoofQueue.getJobCounts(), memoryUsage: 'Memory usage: ' + process.memoryUsage().heapUsed / 1024 / 1024 + ' MB' });
 });
 
 // Error handling
@@ -53,17 +61,6 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
-
-// Log the number of jobs in the queue and the memory usage of that process every 10 seconds
-
-// console.log the number of jobs in the queue and the memory usage of that process every 10 seconds
-setInterval(async () => {
-    const jobs = await spoofQueue.getJobCounts();
-    const used = process.memoryUsage().heapUsed / 1024 / 1024;
-    console.log(`Jobs in queue:`, jobs);
-    console.log(`Memory usage: ${Math.round(used * 100) / 100} MB`);
-}, 10000);
-
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
