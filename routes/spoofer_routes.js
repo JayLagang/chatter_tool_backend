@@ -16,6 +16,7 @@ router.post('/spoof-image', parseMiddleware, async (req, res) => {
             files: req.files,
             body: req.body
         });
+        console.log(`Job added to queue with ID: ${job.id}`); // Add logging here
         res.json({ jobId: job.id });
     } catch (error) {
         console.error('Queueing error:', error);

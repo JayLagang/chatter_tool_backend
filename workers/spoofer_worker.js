@@ -18,3 +18,6 @@ worker.on('completed', job => {
 worker.on('failed', (job, err) => {
     console.error(`Job ${job.id} failed:`, err);
 });
+
+// Add logging to confirm worker initialization
+console.log('Worker initialized and listening for jobs');
